@@ -17,7 +17,10 @@
       --bg-cream: #F8F4E1;
       --accent-tan: #AF8F6F;
       --accent-brown: #74512D;
+      --accent-warm: #AF8F6F;
       --coffee-dark: #543310;
+      --coffee-medium: #74512D;
+      --cream: #F8F4E1;
     }
 
     body {
@@ -676,7 +679,7 @@
         right: 0;
         height: 100vh;
         width: 300px;
-        background: var(--coffee-dark);
+        background: rgba(84, 51, 16, 0.95); /* Using coffee-dark with transparency */
         flex-direction: column;
         justify-content: center;
         gap: 25px;
@@ -699,11 +702,16 @@
       .hero-left { padding: 40px 8%; text-align: center; }
       .hero-left h1 { font-size: 40px; }
       .hero-left p { margin: 0 auto 30px; font-size: 16px; }
+      .wheel-title { font-size: 32px; margin-bottom: 25px; }
+      .wheel-layout { grid-template-columns: 1fr; scale: 1; margin: 0; gap: 30px; }
+      .wheel-cats-panel { padding: 20px; }
+      .wheel-cat-option { padding: 10px 15px; margin-bottom: 10px; font-size: 14px; }
+      .result-badge { padding: 12px 25px; font-size: 20px; }
+      .btn-spin-action { padding: 12px 40px; font-size: 24px; }
       .signup-bar { margin: 0 auto; flex-direction: column; border-radius: 20px; gap: 10px; background: transparent; border: none; }
       .signup-bar input { background: rgba(255, 255, 255, 0.1); border: 1.5px solid rgba(255, 255, 255, 0.3); border-radius: 30px; width: 100%; text-align: center; }
       .signup-bar button { width: 100%; }
       .menu-grid { grid-template-columns: 1fr; gap: 20px; padding: 0 15px; }
-      .wheel-layout { grid-template-columns: 1fr; scale: 0.8; margin: -50px 0; }
     }
 
     /* Auth Modal Mobile Refinement */

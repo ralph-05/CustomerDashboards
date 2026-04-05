@@ -31,7 +31,10 @@ input[type=number] {
   --bg-cream: #F8F4E1;
   --accent-tan: #AF8F6F;
   --accent-brown: #74512D;
+  --accent-warm: #AF8F6F; /* Alias for consistency */
   --coffee-dark: #543310;
+  --coffee-medium: #74512D;
+  --cream: #F8F4E1;
   
   --white: #ffffff;
   --success: #5fb878;
