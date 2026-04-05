@@ -15,6 +15,16 @@
   <script src="../supabase-init.js"></script>
 </head>
 <body>
+  <!-- Mobile Header -->
+  <header class="mobile-header">
+    <div class="mobile-logo">
+      <img src="../images/tori.jpg" alt="Tori Logo">
+    </div>
+    <button class="mobile-burger-btn" onclick="toggleMobileNav()">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </header>
+
   <!-- Left sidebar navigation with branding -->
   <nav id="mainNav" class="sidebar-nav" style="display:none;">
     <div class="sidebar-branding">
@@ -22,6 +32,7 @@
     </div>
     
     <div class="nav-links">
+      <button class="mobile-nav-close" onclick="toggleMobileNav()">✕</button>
       <button class="nav-btn" onclick="showPage('menu')" title="Menu" data-page="menu">
         <span class="nav-label">MENU</span>
       </button>
@@ -40,6 +51,9 @@
       <button class="nav-btn" id="navTrack" onclick="showPage('track')" title="Track" data-page="track">
         <span class="nav-label">TRACK</span>
       </button>
+      <button class="nav-btn logout-nav-btn" onclick="customerLogout()">
+        <span class="nav-label">LOGOUT</span>
+      </button>
     </div>
 
     <div class="sidebar-footer">
@@ -48,6 +62,8 @@
       </button>
     </div>
   </nav>
+
+  <div class="mobile-nav-overlay" onclick="toggleMobileNav()"></div>
 
   <div class="top-actions">
     <button id="orderDrawerBtn" class="action-btn cart-btn" onclick="toggleOrderDrawer()" title="Your Order">
@@ -434,23 +450,18 @@
   <div id="menu" class="page" style="display:none;">
     <div class="menu-top-section">
       <div class="search-bar-container">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
         <input type="text" id="menuSearch" placeholder="Search menu items..." oninput="searchMenu(this.value)" class="menu-search-input">
       </div>
       
       <div class="category-selector-container">
-        <div class="category-dropdown" id="categoryDropdown">
-          <button class="category-dropbtn" onclick="toggleCategoryDropdown()">
-            <span id="currentCategoryLabel">All Items</span>
-            <i class="fa-solid fa-chevron-down"></i>
-          </button>
-          <div class="category-dropdown-content" id="categoryMenu">
-            <div class="category-item active" onclick="selectCategory('All', this)">All Items</div>
-            <div class="category-item" onclick="selectCategory('Coffee', this)">Coffee</div>
-            <div class="category-item" onclick="selectCategory('Non-coffee', this)">Non-coffee</div>
-            <div class="category-item" onclick="selectCategory('Frappe', this)">Frappe</div>
-            <div class="category-item" onclick="selectCategory('Soda', this)">Soda</div>
-            <div class="category-item" onclick="selectCategory('Pastries', this)">Pastries</div>
-          </div>
+        <div class="category-pills" id="categoryPills">
+          <button class="cat-pill active" onclick="selectCategory('All', this)">All Items</button>
+          <button class="cat-pill" onclick="selectCategory('Coffee', this)">Coffee</button>
+          <button class="cat-pill" onclick="selectCategory('Non-coffee', this)">Non-coffee</button>
+          <button class="cat-pill" onclick="selectCategory('Frappe', this)">Frappe</button>
+          <button class="cat-pill" onclick="selectCategory('Soda', this)">Soda</button>
+          <button class="cat-pill" onclick="selectCategory('Pastries', this)">Pastries</button>
         </div>
       </div>
     </div>

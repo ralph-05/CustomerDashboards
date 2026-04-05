@@ -38,7 +38,10 @@
 body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(135deg, var(--tan-dark) 0%, var(--tan-medium) 50%, var(--tan-light) 100%);
+  background-color: var(--tan-dark);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="80" stroke="%23ffffff" stroke-width="15" fill="none" opacity="0.05"/><circle cx="100" cy="100" r="50" stroke="%23ffffff" stroke-width="10" fill="none" opacity="0.03"/><circle cx="100" cy="100" r="25" stroke="%23ffffff" stroke-width="5" fill="none" opacity="0.02"/></svg>');
+  background-size: 300px;
+  background-repeat: repeat;
   background-attachment: fixed;
   font-family: var(--font-inter);
   color: var(--text-dark);
@@ -46,6 +49,71 @@ body {
   min-height: 100vh;
   font-size: var(--fs-p);
   line-height: 1.6;
+}
+
+/* Mobile Header */
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: var(--tan-dark);
+  padding: 0 20px;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1050;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.mobile-logo img {
+  height: 40px;
+  background: white;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.mobile-burger-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1090;
+}
+
+.mobile-nav-overlay.active {
+  display: block;
+}
+
+.mobile-nav-close {
+  display: none;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.logout-nav-btn {
+  display: none !important;
+  margin-top: auto !important;
+  color: var(--danger) !important;
 }
 
 .customer-bell {
@@ -153,54 +221,63 @@ body {
   color: #777;
 }
 
-/* Top Actions (Cart & Bell) */
+/* Floating Action Buttons (Cart & Bell) */
 .top-actions {
   position: fixed;
-  top: 20px;
+  top: 80px;
   right: 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  z-index: 1100;
+  gap: 20px;
+  z-index: 1040;
 }
 
 .action-btn {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  background: var(--white);
+  background: white;
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
   cursor: pointer;
   position: relative;
-  font-size: 28px;
-  color: var(--black);
-  transition: transform 0.2s;
+  font-size: 24px;
+  color: #333;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .action-btn:hover {
-  transform: scale(1.1);
+  transform: scale(1.1) rotate(5deg);
 }
 
-.action-btn .badge, .action-btn .bell-badge {
+.action-btn .badge, 
+.action-btn .bell-badge {
   position: absolute;
   top: -2px;
   right: -2px;
-  background: var(--tan-medium);
-  color: var(--white);
-  font-size: 14px;
+  background: #FFD700; /* Gold/Yellow from image */
+  color: #543310;
+  font-size: 12px;
   font-weight: 800;
-  min-width: 24px;
-  height: 24px;
-  border-radius: 12px;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 6px;
-  border: 3px solid var(--white);
+  border: 2px solid white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.bell-btn i {
+  color: #FFD700; /* Make bell icon yellow like in image */
+}
+
+.cart-btn i {
+  color: #333;
 }
 
 /* Menu Management Layout */
@@ -229,69 +306,80 @@ body {
   font-family: var(--font-inter);
 }
 
-.category-selector-container {
-  width: 100%;
-  max-width: 600px;
+.menu-top-section {
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
-.category-dropdown {
-  position: relative;
-  display: inline-block;
-  width: 220px;
-}
-
-.category-dropbtn {
-  background-color: var(--white);
-  color: var(--black);
-  padding: 12px 20px;
-  font-size: 18px;
-  border: none;
-  cursor: pointer;
-  border-radius: 12px;
-  width: 100%;
+.search-bar-container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-weight: 700;
-  font-family: var(--font-inter);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  background: white;
+  border-radius: 12px;
+  padding: 5px 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-.category-dropdown-content {
+.search-icon {
+  color: #888;
+  font-size: 18px;
+  margin-right: 15px;
+}
+
+.menu-search-input {
+  flex: 1;
+  border: none;
+  background: none;
+  padding: 15px 0;
+  font-size: 16px;
+  outline: none;
+  color: var(--coffee-dark);
+}
+
+.category-selector-container {
+  overflow-x: auto;
+  padding-bottom: 5px;
+  scrollbar-width: none;
+  display: flex;
+  justify-content: center;
+}
+
+.category-selector-container::-webkit-scrollbar {
   display: none;
-  position: absolute;
-  background-color: var(--white);
-  min-width: 100%;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
-  z-index: 1;
-  border-radius: 8px;
-  margin-top: 5px;
-  overflow: hidden;
 }
 
-.category-dropdown-content.show {
-  display: block;
+.category-pills {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.category-item {
-  color: var(--black);
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
+.cat-pill {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s;
+  transition: all 0.3s;
+  font-size: 15px;
+  white-space: nowrap;
 }
 
-.category-item:hover {
-  background-color: #f1f1f1;
+.cat-pill.active {
+  background: var(--accent-warm);
+  border-color: var(--accent-warm);
+  color: white;
+  box-shadow: 0 4px 12px rgba(175, 143, 111, 0.4);
 }
 
-.category-item.active {
-  background-color: #F8F4E1;
-  font-weight: 700;
+/* Hide legacy dropdown */
+.category-dropdown {
+  display: none;
 }
 
 /* Promo Redesign */
@@ -848,13 +936,117 @@ Actually, it looks like a pill shape. */
   transform: scale(1.1);
 }
 
-/* Card Styling Consistency */
-.card {
+/* Menu Item Card Design (Image Matching) */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.menu-item-card {
   background: white;
-  border-radius: 24px;
-  padding: 30px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.03);
-  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s;
+}
+
+.menu-item-card:hover {
+  transform: translateY(-10px);
+}
+
+.menu-item-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.menu-item-info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.menu-item-info h3 {
+  margin: 0;
+  font-family: var(--font-slab);
+  font-size: 20px;
+  color: var(--coffee-dark);
+}
+
+.temp-buttons-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.temp-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #eee;
+  color: #444;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.temp-icon-btn.active {
+  background: var(--accent-warm);
+  color: white;
+  box-shadow: 0 4px 10px rgba(175, 143, 111, 0.4);
+}
+
+.menu-item-sizes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.size-price-btn {
+  background: #C4A484; /* Light brown from image */
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.size-price-btn:hover {
+  background: #B08D6A;
+}
+
+.size-price-btn div:first-child {
+  font-size: 11px;
+  opacity: 0.9;
+  font-weight: 400;
+}
+
+/* Category Header */
+.category-header {
+  grid-column: 1 / -1;
+  font-family: var(--font-slab);
+  font-size: 24px;
+  color: white;
+  margin: 20px 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 2px solid rgba(255,255,255,0.2);
+  padding-bottom: 10px;
 }
 
 /* Improved Track Table Styles */
@@ -3330,94 +3522,90 @@ h1 {
 @media (max-width: 1024px) {
   body {
     margin-left: 0 !important;
-    padding: 10px 10px calc(90px + env(safe-area-inset-bottom)) 10px !important; /* Keep space for bottom nav + guest banner */
+    padding-top: 80px !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
     display: block !important;
   }
 
-  .sidebar-nav,
-  #mainNav.sidebar-nav {
+  .mobile-header {
+    display: flex;
+  }
+
+  .sidebar-nav {
+    display: none !important;
     position: fixed !important;
-    top: auto !important;
-    bottom: var(--mobile-nav-bottom, 0) !important;
-    left: 0 !important;
+    top: 0 !important;
+    right: -300px !important;
+    width: 300px !important;
+    height: 100vh !important;
+    background: var(--tan-dark) !important;
+    z-index: 1100 !important;
+    flex-direction: column !important;
+    padding: 60px 20px !important;
+    transition: right 0.3s ease !important;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.3) !important;
+  }
+
+  .sidebar-nav.mobile-active {
+    display: flex !important;
     right: 0 !important;
-    width: 100% !important;
-    height: 70px !important;
-    margin: 0 !important;
-    flex-direction: row !important;
-    justify-content: space-around !important;
-    align-items: center !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.2) !important;
-    gap: 0 !important;
-    z-index: 9999 !important;
-    transform: translateZ(0) !important;
-    /* Fallback: if device is too narrow, allow horizontal scroll */
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-nav-close {
+    display: block;
+  }
+
+  .nav-links {
+    flex-direction: column !important;
+    gap: 15px !important;
   }
 
   .nav-btn {
-    width: auto !important;
-    height: 100% !important;
-    flex: 1 !important;
-    border-radius: 0 !important;
-    padding: 5px !important;
-    gap: 2px !important;
-    min-width: 56px; /* keeps each tab tappable */
+    width: 100% !important;
+    height: auto !important;
+    padding: 15px !important;
+    justify-content: flex-start !important;
+    border-radius: 8px !important;
+    background: rgba(255,255,255,0.05) !important;
+    color: white !important;
   }
 
   .nav-btn.active {
-    background: rgba(255, 255, 255, 0.05) !important;
-    color: var(--accent-warm) !important;
-    box-shadow: none !important;
-    border-top: 3px solid var(--accent-warm) !important;
+    background: var(--accent-warm) !important;
+    color: white !important;
+    border: none !important;
   }
 
-  .nav-icon {
-    font-size: 20px !important;
+  .logout-nav-btn {
+    display: flex !important;
   }
 
-  .nav-label {
-    font-size: 9px !important;
-    letter-spacing: 0.5px !important;
+  .sidebar-branding, .sidebar-footer {
+    display: none !important;
   }
 
   .page {
     margin-left: 0 !important;
-    padding: 20px 20px 140px 20px !important; /* Leave room for bottom nav */
-    max-width: 100% !important;
-    width: 100% !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
+    padding: 0 !important;
+    padding-bottom: 40px !important;
   }
 
-  body {
-    padding-bottom: calc(90px + env(safe-area-inset-bottom)) !important;
+  .top-actions {
+    top: 80px;
+    right: 15px;
+    flex-direction: column;
   }
 
-  .order-drawer-btn {
-    bottom: 90px !important;
-    top: auto !important;
-    right: 20px !important;
-    transform: none !important;
-    width: 56px !important;
-    height: 56px !important;
-    border-radius: 50% !important;
-    align-items: center !important;
-    justify-content: center !important;
+  .action-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
   }
 
-  .order-drawer-btn.preorder-btn {
-    bottom: 160px !important; /* Move it above the regular order drawer btn */
-  }
-
-  .customer-bell {
-    top: 15px !important;
-    right: 15px !important;
-    width: 44px !important;
-    height: 44px !important;
+  .menu-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
   }
 }
 

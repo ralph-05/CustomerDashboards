@@ -31,21 +31,19 @@
       font-family: 'Inter', sans-serif;
     }
 
-    /* Top Navbar */
     .navbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 15px 5%;
-      background: var(--coffee-dark) !important; /* Explicitly dark */
-      border-bottom: 1.5px solid rgba(255, 255, 255, 0.1); /* Subtle white lining */
+      background: var(--coffee-dark);
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.05);
       position: sticky;
       top: 0;
       width: 100%;
       z-index: 1000;
       box-sizing: border-box;
-      backdrop-filter: blur(5px);
-      margin-bottom: 0 !important; /* Remove global margin */
+      backdrop-filter: blur(10px);
     }
 
     .nav-logo img {
@@ -135,35 +133,24 @@
       cursor: pointer;
     }
 
-    /* Decorative Coffee Beans */
+    /* Decorative Circles Background */
     .coffee-bean-design {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      opacity: 0.15; /* Subtle background */
+      opacity: 0.15;
       pointer-events: none;
-      z-index: 0; /* Behind content */
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10C30 10 10 30 10 50s20 40 40 40 40-20 40-40-20-40-40-40zm0 70c-15 0-30-15-30-30s15-30 30-30 30 15 30 30-15 30-30 30z" fill="%23ffffff"/><path d="M50 30c-10 0-20 10-20 20s10 20 20 20 20-10 20-20-10-20-20-20zm0 30c-5 0-10-5-10-10s5-10 10-10 10 5 10 10-5 10-10 10z" fill="%23ffffff"/></svg>');
-      background-size: 250px;
+      z-index: 0;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="80" stroke="%23ffffff" stroke-width="15" fill="none" opacity="0.05"/><circle cx="100" cy="100" r="50" stroke="%23ffffff" stroke-width="10" fill="none" opacity="0.03"/><circle cx="100" cy="100" r="25" stroke="%23ffffff" stroke-width="5" fill="none" opacity="0.02"/></svg>');
+      background-size: 350px;
       background-repeat: repeat;
+      background-position: center;
     }
 
-    /* Specific beans as per image */
-    .hero-left::before {
-      content: '';
-      position: absolute;
-      bottom: -50px;
-      left: -50px;
-      width: 400px;
-      height: 400px;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path d="M100 20C60 20 20 60 20 100s40 80 80 80 80-40 80-80-40-80-80-80zm0 140c-30 0-60-30-60-60s30-60 60-60 60 30 60 60-30 60-60 60z" fill="%23ffffff" opacity="0.1"/></svg>');
-      background-size: 150px;
-      background-repeat: no-repeat;
-      transform: rotate(-15deg);
-      z-index: 0;
-    }
+    /* Specific beans removed as per image request */
+    .hero-left::before { display: none; }
 
     /* Page Views */
     .page-view {
@@ -695,23 +682,25 @@
         from { transform: translateX(100%); opacity: 0; }
         to { transform: translateX(0); opacity: 1; }
       }
-      .nav-links a { font-size: 20px; width: 100%; text-align: left; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-      .btn-signin { width: 100%; margin-top: 20px; padding: 15px; font-size: 18px; text-align: center; }
-      .hero-container { flex-direction: column; padding-top: 100px; }
+      .nav-links a { font-size: 20px; width: 100%; text-align: center; padding: 15px 0; border: none; font-weight: 600; }
+      .btn-signin { width: 100%; margin-top: 20px; padding: 15px; font-size: 18px; text-align: center; border-radius: 50px; }
+      .hero-container { flex-direction: column; padding-top: 80px; }
       .hero-visual { order: -1; min-height: 40vh; width: 100%; }
       .hero-left { padding: 40px 8%; text-align: center; }
-      .hero-left h1 { font-size: 40px; }
-      .hero-left p { margin: 0 auto 30px; font-size: 16px; }
+      .hero-left h1 { font-size: clamp(32px, 8vw, 40px); margin-bottom: 20px; }
+      .hero-left p { margin: 0 auto 30px; font-size: 14px; max-width: 90%; }
       .wheel-title { font-size: 32px; margin-bottom: 25px; }
       .wheel-layout { grid-template-columns: 1fr; scale: 1; margin: 0; gap: 30px; }
       .wheel-cats-panel { padding: 20px; }
       .wheel-cat-option { padding: 10px 15px; margin-bottom: 10px; font-size: 14px; }
       .result-badge { padding: 12px 25px; font-size: 20px; }
       .btn-spin-action { padding: 12px 40px; font-size: 24px; }
-      .signup-bar { margin: 0 auto; flex-direction: column; border-radius: 20px; gap: 10px; background: transparent; border: none; }
-      .signup-bar input { background: rgba(255, 255, 255, 0.1); border: 1.5px solid rgba(255, 255, 255, 0.3); border-radius: 30px; width: 100%; text-align: center; }
-      .signup-bar button { width: 100%; }
+      .signup-bar { margin: 0 auto; flex-direction: column; border-radius: 20px; gap: 15px; background: transparent; border: none; max-width: 320px; }
+      .signup-bar input { background: rgba(255, 255, 255, 0.05); border: 1.5px solid rgba(255, 255, 255, 0.2); border-radius: 50px; width: 100%; text-align: center; padding: 15px; }
+      .signup-bar button { width: 100%; padding: 15px; border-radius: 50px; background-color: var(--accent-tan); font-size: 18px; }
+      .btn-signin { width: auto; margin: 0; padding: 6px 15px; font-size: 13px; border-radius: 30px; }
       .menu-grid { grid-template-columns: 1fr; gap: 20px; padding: 0 15px; }
+      .hero-container { flex-direction: column; padding-top: 60px; }
     }
 
     /* Auth Modal Mobile Refinement */
