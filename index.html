@@ -25,6 +25,10 @@
 
     body {
       background-color: var(--coffee-dark);
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="80" stroke="%23ffffff" stroke-width="15" fill="none" opacity="0.05"/><circle cx="100" cy="100" r="50" stroke="%23ffffff" stroke-width="10" fill="none" opacity="0.03"/><circle cx="100" cy="100" r="25" stroke="%23ffffff" stroke-width="5" fill="none" opacity="0.02"/></svg>');
+      background-size: 350px;
+      background-repeat: repeat;
+      background-attachment: fixed;
       margin: 0;
       padding: 0;
       overflow-x: hidden;
@@ -36,7 +40,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 15px 5%;
-      background: var(--coffee-dark);
+      background: rgba(84, 51, 16, 0.8);
       border-bottom: 1.5px solid rgba(255, 255, 255, 0.05);
       position: sticky;
       top: 0;
@@ -44,6 +48,7 @@
       z-index: 1000;
       box-sizing: border-box;
       backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
     .nav-logo img {
@@ -134,20 +139,7 @@
     }
 
     /* Decorative Circles Background */
-    .coffee-bean-design {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0.15;
-      pointer-events: none;
-      z-index: 0;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="80" stroke="%23ffffff" stroke-width="15" fill="none" opacity="0.05"/><circle cx="100" cy="100" r="50" stroke="%23ffffff" stroke-width="10" fill="none" opacity="0.03"/><circle cx="100" cy="100" r="25" stroke="%23ffffff" stroke-width="5" fill="none" opacity="0.02"/></svg>');
-      background-size: 350px;
-      background-repeat: repeat;
-      background-position: center;
-    }
+    .coffee-bean-design { display: none; }
 
     /* Specific beans removed as per image request */
     .hero-left::before { display: none; }
@@ -654,11 +646,11 @@
       .navbar { 
         padding: 10px 15px; 
         justify-content: space-between; 
-        background: var(--coffee-dark) !important;
-        position: fixed; /* Stickier on mobile */
+        background: var(--coffee-dark);
+        position: fixed;
       }
-      .nav-logo img { height: 45px; }
-      .mobile-menu-btn { display: block; }
+      .nav-logo img { height: 40px; }
+      .mobile-menu-btn { display: block; margin-left: auto; } /* Ensure it stays on the right */
       .nav-links { 
         display: none; 
         position: fixed;
@@ -666,41 +658,56 @@
         right: 0;
         height: 100vh;
         width: 300px;
-        background: rgba(84, 51, 16, 0.95); /* Using coffee-dark with transparency */
+        background: rgba(84, 51, 16, 0.98);
         flex-direction: column;
         justify-content: center;
+        align-items: center;
         gap: 25px;
         padding: 60px 40px;
         box-shadow: -10px 0 30px rgba(0,0,0,0.5);
         z-index: 2000;
         backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
         border-left: 1px solid rgba(255,255,255,0.1);
       }
       .nav-links.active { display: flex; animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-      .mobile-menu-close { display: block; }
+      .mobile-menu-close { display: block; top: 20px; right: 20px; }
       @keyframes slideIn {
         from { transform: translateX(100%); opacity: 0; }
         to { transform: translateX(0); opacity: 1; }
       }
-      .nav-links a { font-size: 20px; width: 100%; text-align: center; padding: 15px 0; border: none; font-weight: 600; }
-      .btn-signin { width: 100%; margin-top: 20px; padding: 15px; font-size: 18px; text-align: center; border-radius: 50px; }
-      .hero-container { flex-direction: column; padding-top: 80px; }
-      .hero-visual { order: -1; min-height: 40vh; width: 100%; }
-      .hero-left { padding: 40px 8%; text-align: center; }
-      .hero-left h1 { font-size: clamp(32px, 8vw, 40px); margin-bottom: 20px; }
-      .hero-left p { margin: 0 auto 30px; font-size: 14px; max-width: 90%; }
-      .wheel-title { font-size: 32px; margin-bottom: 25px; }
-      .wheel-layout { grid-template-columns: 1fr; scale: 1; margin: 0; gap: 30px; }
-      .wheel-cats-panel { padding: 20px; }
-      .wheel-cat-option { padding: 10px 15px; margin-bottom: 10px; font-size: 14px; }
-      .result-badge { padding: 12px 25px; font-size: 20px; }
-      .btn-spin-action { padding: 12px 40px; font-size: 24px; }
-      .signup-bar { margin: 0 auto; flex-direction: column; border-radius: 20px; gap: 15px; background: transparent; border: none; max-width: 320px; }
-      .signup-bar input { background: rgba(255, 255, 255, 0.05); border: 1.5px solid rgba(255, 255, 255, 0.2); border-radius: 50px; width: 100%; text-align: center; padding: 15px; }
-      .signup-bar button { width: 100%; padding: 15px; border-radius: 50px; background-color: var(--accent-tan); font-size: 18px; }
-      .btn-signin { width: auto; margin: 0; padding: 6px 15px; font-size: 13px; border-radius: 30px; }
-      .menu-grid { grid-template-columns: 1fr; gap: 20px; padding: 0 15px; }
-      .hero-container { flex-direction: column; padding-top: 60px; }
+      .nav-links a { font-size: 20px; width: 100%; text-align: center; padding: 15px 0; border: none; font-weight: 600; color: white !important; }
+      .btn-signin { width: 80%; margin-top: 20px; padding: 12px; font-size: 16px; text-align: center; border-radius: 50px; border: 1.5px solid white; color: white; background: transparent; }
+      
+      .hero-container { flex-direction: column; padding-top: 60px; text-align: center; }
+      .hero-visual { order: -1; min-height: 35vh; width: 100%; }
+      .hero-left { padding: 30px 20px; align-items: center; }
+      .hero-left h1 { font-size: clamp(28px, 10vw, 36px); margin-bottom: 15px; }
+      .hero-left p { font-size: 13px; margin-bottom: 25px; max-width: 100%; }
+      .signup-bar { flex-direction: column; gap: 12px; background: transparent; border: none; max-width: 280px; width: 100%; }
+      .signup-bar input { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 50px; text-align: center; padding: 12px; width: 100%; }
+      .signup-bar button { width: 100%; padding: 12px; border-radius: 50px; font-size: 16px; }
+
+      .wheel-view { display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+      .wheel-title { font-size: 28px; margin-bottom: 20px; text-align: center; }
+      .wheel-layout { grid-template-columns: 1fr; width: 100%; gap: 20px; }
+      .wheel-cats-panel { padding: 15px; order: 2; }
+      .wheel-visual-panel { order: 1; }
+      .wheel-column-action { order: 3; display: flex; justify-content: center; width: 100%; }
+      .btn-spin-action { padding: 12px 40px; font-size: 24px; margin: 0 auto; }
+      .result-badge { margin-top: 20px; font-size: 18px; padding: 10px 30px; }
+
+      .about-view { padding: 30px 15px; align-items: center; text-align: center; }
+      .card-base { padding: 25px 20px; border-radius: 20px; width: 100%; max-width: 400px; }
+      .about-top-card { flex-direction: column; gap: 20px; }
+      .about-title-box { font-size: 20px; margin-bottom: 15px; }
+      .about-desc-box { font-size: 16px; padding: 20px; }
+      .about-logo-right img { max-width: 200px; margin: 0 auto; }
+      .about-bottom-grid { grid-template-columns: 1fr; gap: 20px; width: 100%; }
+      .contact-card-header { flex-direction: column; gap: 10px; }
+      .contact-item-box { font-size: 14px; padding: 12px; justify-content: center; }
+      
+      .menu-grid { grid-template-columns: 1fr; gap: 20px; padding: 0 10px; }
     }
 
     /* Auth Modal Mobile Refinement */

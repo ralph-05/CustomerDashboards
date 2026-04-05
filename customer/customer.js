@@ -1655,10 +1655,20 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 // --- PAGE NAVIGATION ---
+window.showPage = showPage;
+
 function showPage(page) {
   document.querySelectorAll(".page").forEach((p) => (p.style.display = "none"))
   const pageEl = document.getElementById(page)
   if (pageEl) pageEl.style.display = "block"
+
+  // Automatically close mobile nav when switching pages
+  if (typeof toggleMobileNav === 'function') {
+    const sidebar = document.getElementById('mainNav');
+    if (sidebar && sidebar.classList.contains('mobile-active')) {
+      toggleMobileNav();
+    }
+  }
 
   // Track current page for UI guards (e.g., preorder drawer only on booking page)
   window.__customerCurrentPage = page

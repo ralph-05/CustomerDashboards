@@ -38,10 +38,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--tan-dark);
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="80" stroke="%23ffffff" stroke-width="15" fill="none" opacity="0.05"/><circle cx="100" cy="100" r="50" stroke="%23ffffff" stroke-width="10" fill="none" opacity="0.03"/><circle cx="100" cy="100" r="25" stroke="%23ffffff" stroke-width="5" fill="none" opacity="0.02"/></svg>');
-  background-size: 300px;
-  background-repeat: repeat;
+  background: linear-gradient(135deg, #AF8F6F 0%, #74512D 50%, #543310 100%);
   background-attachment: fixed;
   font-family: var(--font-inter);
   color: var(--text-dark);
@@ -59,7 +56,7 @@ body {
   left: 0;
   right: 0;
   height: 60px;
-  background: var(--tan-dark);
+  background: #543310;
   padding: 0 20px;
   justify-content: space-between;
   align-items: center;
@@ -80,6 +77,9 @@ body {
   color: white;
   font-size: 24px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mobile-nav-overlay {
@@ -89,13 +89,28 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   z-index: 1090;
 }
 
 .mobile-nav-overlay.active {
   display: block;
+}
+
+.sidebar-nav {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 280px;
+  background: #543310;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 20px;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  border-right: 1px solid rgba(255,255,255,0.05);
 }
 
 .mobile-nav-close {
@@ -3533,52 +3548,70 @@ h1 {
   }
 
   .sidebar-nav {
-    display: none !important;
+    display: flex !important;
     position: fixed !important;
     top: 0 !important;
-    right: -300px !important;
+    right: -320px !important;
     width: 300px !important;
     height: 100vh !important;
-    background: var(--tan-dark) !important;
+    background: #543310 !important;
     z-index: 1100 !important;
     flex-direction: column !important;
-    padding: 60px 20px !important;
-    transition: right 0.3s ease !important;
-    box-shadow: -5px 0 15px rgba(0,0,0,0.3) !important;
+    padding: 80px 30px !important;
+    transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5) !important;
   }
 
   .sidebar-nav.mobile-active {
-    display: flex !important;
     right: 0 !important;
   }
 
   .mobile-nav-close {
     display: block;
+    top: 25px;
+    right: 25px;
   }
 
   .nav-links {
+    display: flex !important;
     flex-direction: column !important;
-    gap: 15px !important;
+    gap: 20px !important;
+    width: 100% !important;
   }
 
   .nav-btn {
     width: 100% !important;
     height: auto !important;
-    padding: 15px !important;
+    padding: 16px 20px !important;
     justify-content: flex-start !important;
-    border-radius: 8px !important;
-    background: rgba(255,255,255,0.05) !important;
+    border-radius: 12px !important;
+    background: rgba(255,255,255,0.08) !important;
     color: white !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
   }
 
   .nav-btn.active {
-    background: var(--accent-warm) !important;
+    background: #AF8F6F !important;
     color: white !important;
     border: none !important;
+    box-shadow: 0 4px 15px rgba(175, 143, 111, 0.3) !important;
+  }
+
+  .nav-label {
+    display: inline !important;
+    font-size: 16px !important;
   }
 
   .logout-nav-btn {
     display: flex !important;
+    background: rgba(217, 83, 79, 0.1) !important;
+    border-color: rgba(217, 83, 79, 0.2) !important;
+    color: #d9534f !important;
   }
 
   .sidebar-branding, .sidebar-footer {
@@ -3588,19 +3621,13 @@ h1 {
   .page {
     margin-left: 0 !important;
     padding: 0 !important;
-    padding-bottom: 40px !important;
+    padding-bottom: 60px !important;
+    width: 100% !important;
   }
 
   .top-actions {
     top: 80px;
     right: 15px;
-    flex-direction: column;
-  }
-
-  .action-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
   }
 
   .menu-grid {
