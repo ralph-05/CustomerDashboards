@@ -15,17 +15,24 @@
   <script src="../supabase-init.js"></script>
 </head>
 <body>
-  <!-- Dashboard Header (Same for Mobile & Desktop) -->
+  <!-- Dashboard Header (Matched to Debug Image) -->
   <header class="dashboard-header">
     <div class="header-left">
-      <div class="header-logo" onclick="location.href='../index.html'">
-        <img src="../images/tori.jpg" alt="Tori Logo">
-      </div>
-    </div>
-    <div class="header-right">
       <button class="burger-menu-btn" onclick="toggleMobileNav()">
         <i class="fa-solid fa-bars"></i>
       </button>
+    </div>
+    <div class="header-right">
+      <div class="top-actions">
+        <button id="orderDrawerBtn" class="action-btn cart-btn" onclick="toggleOrderDrawer()">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="badge" id="orderCartBadge"></span>
+        </button>
+        <button id="customerBell" class="action-btn bell-btn" onclick="openCustomerNotifications()">
+          <i class="fa-solid fa-bell"></i>
+          <span id="customerBellBadge" class="bell-badge"></span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -68,18 +75,6 @@
   </nav>
 
   <div class="mobile-nav-overlay" onclick="toggleMobileNav()"></div>
-
-  <div class="top-actions">
-    <button id="orderDrawerBtn" class="action-btn cart-btn" onclick="toggleOrderDrawer()" title="Your Order">
-      <i class="fa-solid fa-cart-shopping"></i>
-      <span class="badge" id="orderCartBadge"></span>
-    </button>
-    
-    <button id="customerBell" class="action-btn bell-btn" onclick="openCustomerNotifications()">
-      <i class="fa-solid fa-bell"></i>
-      <span id="customerBellBadge" class="bell-badge"></span>
-    </button>
-  </div>
 
   <!-- Pre-order Cart Drawer -->
   <button id="preorderDrawerBtn" class="order-drawer-btn preorder-btn" onclick="togglePreorderDrawer()" title="Pre-order Cart" style="display:none; background-color: var(--preorder-accent);">
@@ -453,20 +448,19 @@
   <!-- MENU PAGE -->
   <div id="menu" class="page" style="display:none;">
     <div class="menu-top-section">
-      <div class="search-bar-container">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" id="menuSearch" placeholder="Search menu items..." oninput="searchMenu(this.value)" class="menu-search-input">
-      </div>
-      
       <div class="category-selector-container">
-        <div class="category-pills" id="categoryPills">
-          <button class="cat-pill active" onclick="selectCategory('All', this)">All Items</button>
-          <button class="cat-pill" onclick="selectCategory('Coffee', this)">Coffee</button>
-          <button class="cat-pill" onclick="selectCategory('Non-coffee', this)">Non-coffee</button>
-          <button class="cat-pill" onclick="selectCategory('Frappe', this)">Frappe</button>
-          <button class="cat-pill" onclick="selectCategory('Soda', this)">Soda</button>
-          <button class="cat-pill" onclick="selectCategory('Pastries', this)">Pastries</button>
-        </div>
+        <select id="categorySelect" class="category-dropdown-select" onchange="window.selectCategory(this.value, this)">
+          <option value="All">All Items</option>
+          <option value="Coffee">Coffee</option>
+          <option value="Non-coffee">Non-coffee</option>
+          <option value="Frappe">Frappe</option>
+          <option value="Soda">Soda</option>
+          <option value="Pastries">Pastries</option>
+        </select>
+      </div>
+
+      <div class="search-bar-container">
+        <input type="text" id="menuSearch" placeholder="Search menu items..." oninput="searchMenu(this.value)" class="menu-search-input">
       </div>
     </div>
     
