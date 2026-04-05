@@ -99,20 +99,22 @@ body {
   transform: scale(1.1);
 }
 
-/* Navigation Menu (Always a Sidebar/Overlay triggered by burger) */
+/* Navigation Menu (User-Friendly Sidebar/Overlay) */
 .sidebar-nav {
   position: fixed !important;
   top: 0 !important;
-  right: -350px !important; /* Start hidden */
+  right: -100% !important; /* Fully hidden off-screen */
   width: 320px !important;
+  max-width: 85% !important;
   height: 100vh !important;
-  background: #543310 !important;
+  background: #543310 !important; /* Solid Coffee Dark */
   display: flex !important;
   flex-direction: column !important;
-  padding: 80px 30px !important;
+  padding: 100px 25px 40px 25px !important;
   transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
   z-index: 1100 !important;
-  box-shadow: -10px 0 40px rgba(0,0,0,0.5) !important;
+  box-shadow: -15px 0 50px rgba(0,0,0,0.6) !important;
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-nav.mobile-active {
@@ -126,38 +128,62 @@ body {
 }
 
 .menu-close-btn {
-  background: none;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
   color: white;
-  font-size: 32px;
+  font-size: 28px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.menu-close-btn:hover {
+  background: rgba(217, 83, 79, 0.2);
+  color: #ff6b6b;
 }
 
 .nav-links {
   display: flex !important;
   flex-direction: column !important;
-  gap: 20px !important;
+  gap: 15px !important;
   width: 100% !important;
 }
 
 .nav-btn {
   width: 100% !important;
   height: auto !important;
-  padding: 18px 25px !important;
-  justify-content: center !important;
+  padding: 16px 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 20px !important;
   border-radius: 15px !important;
-  background: rgba(255,255,255,0.08) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
   color: white !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
-  font-size: 18px !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+  font-size: 17px !important;
   font-weight: 700 !important;
-  letter-spacing: 1px !important;
+  letter-spacing: 0.5px !important;
   transition: all 0.3s !important;
   cursor: pointer !important;
+  text-align: left !important;
+}
+
+.nav-btn i {
+  font-size: 20px !important;
+  width: 30px !important;
+  text-align: center !important;
+  color: #AF8F6F !important; /* Accent Tan */
 }
 
 .nav-btn:hover {
-  background: rgba(255,255,255,0.15) !important;
+  background: rgba(175, 143, 111, 0.1) !important;
+  border-color: #AF8F6F !important;
   transform: translateX(-5px);
 }
 
@@ -165,13 +191,21 @@ body {
   background: #AF8F6F !important;
   color: white !important;
   border: none !important;
-  box-shadow: 0 8px 25px rgba(175, 143, 111, 0.4) !important;
+  box-shadow: 0 10px 25px rgba(175, 143, 111, 0.4) !important;
+}
+
+.nav-btn.active i {
+  color: white !important;
 }
 
 .logout-nav-btn {
-  margin-top: 20px !important;
+  margin-top: 30px !important;
   background: rgba(217, 83, 79, 0.1) !important;
   border-color: rgba(217, 83, 79, 0.2) !important;
+  color: #ff6b6b !important;
+}
+
+.logout-nav-btn i {
   color: #ff6b6b !important;
 }
 
@@ -183,8 +217,8 @@ body {
   right: 0;
   bottom: 0;
   background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 1090;
 }
 
@@ -194,11 +228,12 @@ body {
 
 /* Page Layout Adjustments */
 .page {
-  margin-top: 100px !important;
+  margin-top: 90px !important;
   margin-left: 0 !important;
-  padding: 20px 5% 60px 5% !important;
+  padding: 20px 4% 60px 4% !important;
   width: 100% !important;
-  min-height: calc(100vh - 100px);
+  min-height: calc(100vh - 90px);
+  z-index: 1;
 }
 
 /* Hide old elements */
@@ -320,11 +355,11 @@ body {
 /* Floating Action Buttons (Cart & Bell) */
 .top-actions {
   position: fixed;
-  top: 80px;
+  top: 95px; /* Moved down to avoid overlapping the 80px header */
   right: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
   z-index: 1040;
 }
 
@@ -912,125 +947,7 @@ h3 {
 }
 
 /* Sidebar Nav refinement */
-.sidebar-nav {
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 100vh;
-  width: 140px;
-  background: var(--white);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0;
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
-  z-index: 1000;
-  border-right: 1px solid var(--border-light);
-}
-
-.sidebar-branding {
-  padding: 20px 10px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-  background: #fff;
-}
-
-.sidebar-logo-image {
-  width: 120px;
-  height: auto;
-  object-fit: contain;
-  border: none;
-}
-
-.sidebar-logo {
-  max-width: 90%;
-  height: auto;
-  object-fit: contain;
-  margin-top: 20px;
-}
-
-.nav-links {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 10px;
-  flex: 1;
-}
-
-.nav-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 80px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  color: #000; /* Black text */
-  gap: 5px;
-  position: relative;
-}
-
-.nav-label {
-  font-size: 1.125rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: inherit;
-  font-family: var(--font-inter);
-}
-
-.nav-btn:hover {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-.nav-btn.active {
-  background: #F8F4E1; /* Light cream background */
-  color: #000;
-  border-radius: 20px 0 0 20px; /* Rounded on the left to show it's "selected" from the right content? Wait, looking at image, it's rounded on the right */
-  margin-left: 0;
-  width: 100%;
-  box-shadow: none;
-}
-
-.nav-btn.active::before {
-  display: none; /* Remove the vertical bar if it exists */
-}
-
-/* Looking at the reference image, the active state is rounded on both sides or just right? 
-It looks like a rounded pill shape that is partially hidden on the left. 
-Actually, it looks like a pill shape. */
-.nav-btn.active {
-  background: #F8F4E1;
-  border-radius: 15px;
-  margin: 0 10px;
-  width: calc(100% - 20px);
-}
-
-.sidebar-footer {
-  padding: 20px 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.logout-btn {
-  background: transparent;
-  border: none;
-  font-size: 32px;
-  color: var(--black);
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.logout-btn:hover {
-  transform: scale(1.1);
-}
+/* (Redundant styles removed for clarity and UX) */
 
 /* Menu Item Card Design (Image Matching) */
 .menu-grid {
@@ -3155,85 +3072,7 @@ h1 {
   100% { transform: rotate(360deg); }
 }
 
-@media (max-width: 1024px) {
-  body {
-    flex-direction: column;
-  }
-
-  .sidebar-nav {
-    width: 100%;
-    height: auto;
-    position: fixed;
-    bottom: 0;
-    top: auto;
-    flex-direction: row;
-    padding: 10px 20px;
-    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
-    border-right: none;
-    border-top: 1px solid rgba(0,0,0,0.1);
-    justify-content: space-around;
-    z-index: 2000;
-  }
-
-  .sidebar-branding {
-    display: none;
-  }
-
-  .nav-links {
-    flex-direction: row;
-    justify-content: space-around;
-    width: 100%;
-    gap: 0;
-  }
-
-  .nav-btn {
-    height: 70px;
-    width: auto;
-    border-radius: 12px;
-    padding: 0 10px;
-  }
-
-  .nav-label {
-    font-size: 12px;
-  }
-
-  .page {
-    margin-left: 0;
-    width: 100%;
-    padding: 20px;
-    padding-bottom: 100px; /* Space for mobile nav */
-  }
-
-  .menu-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
-  }
-
-  .top-actions {
-    top: 20px;
-    right: 20px;
-    flex-direction: row;
-    gap: 15px;
-  }
-
-  .action-btn {
-    width: 48px;
-    height: 48px;
-    font-size: 1.2rem;
-  }
-
-  .wheel-viz-container {
-    width: min(500px, 90vw);
-    aspect-ratio: 1 / 1;
-    height: auto;
-    min-width: 260px;
-    min-height: 260px;
-  }
-
-  #spin.page {
-    background-attachment: scroll;
-    padding-bottom: calc(140px + env(safe-area-inset-bottom));
-  }
-}
+/* (Tablet nav override removed for burger menu consistency) */
 
 @media (max-width: 768px) {
   .menu-grid {
@@ -3901,16 +3740,9 @@ h1 {
     grid-template-columns: 1fr !important;
   }
 
-  /* Bottom nav: prevent jumbled/overlapping labels on tiny screens */
+  /* (Small phone nav override removed) */
   .sidebar-nav {
-    height: 64px !important;
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
-  .nav-btn {
-    gap: 0 !important;
-    padding: 0 !important;
-    min-width: 0 !important;
+    display: flex !important; /* Keep our sidebar structure */
   }
 
   .nav-icon {
