@@ -15,50 +15,47 @@
   <script src="../supabase-init.js"></script>
 </head>
 <body>
-  <!-- Mobile Header -->
-  <header class="mobile-header">
-    <div class="mobile-logo">
-      <img src="../images/tori.jpg" alt="Tori Logo">
+  <!-- Dashboard Header (Same for Mobile & Desktop) -->
+  <header class="dashboard-header">
+    <div class="header-left">
+      <div class="header-logo" onclick="location.href='../index.html'">
+        <img src="../images/tori.jpg" alt="Tori Logo">
+      </div>
     </div>
-    <button class="mobile-burger-btn" onclick="toggleMobileNav()">
-      <i class="fa-solid fa-bars"></i>
-    </button>
+    <div class="header-right">
+      <button class="burger-menu-btn" onclick="toggleMobileNav()">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
   </header>
 
-  <!-- Left sidebar navigation with branding -->
+  <!-- Navigation Menu (Slide-out Overlay) -->
   <nav id="mainNav" class="sidebar-nav">
-    <div class="sidebar-branding">
-      <img src="../images/tori.jpg" alt="Tori Cafeteria Logo" class="sidebar-logo-image">
+    <div class="sidebar-header">
+      <button class="menu-close-btn" onclick="toggleMobileNav()">✕</button>
     </div>
     
     <div class="nav-links">
-      <button class="mobile-nav-close" onclick="toggleMobileNav()">✕</button>
-      <button class="nav-btn" onclick="showPage('menu')" title="Menu" data-page="menu">
+      <button class="nav-btn" onclick="showPage('menu')" data-page="menu">
         <span class="nav-label">MENU</span>
       </button>
-      <button class="nav-btn" onclick="showPage('promos')" title="Promos" data-page="promos">
+      <button class="nav-btn" onclick="showPage('promos')" data-page="promos">
         <span class="nav-label">PROMOS</span>
       </button>
-      <button class="nav-btn" onclick="showPage('spin')" title="Spin the Wheel" data-page="spin">
+      <button class="nav-btn" onclick="showPage('spin')" data-page="spin">
         <span class="nav-label">SPIN</span>
       </button>
-      <button class="nav-btn" id="navBook" onclick="showPage('book')" title="Booking" data-page="book">
+      <button class="nav-btn" id="navBook" onclick="showPage('book')" data-page="book">
         <span class="nav-label">BOOK</span>
       </button>
-      <button class="nav-btn" id="navLoyalty" onclick="showPage('loyalty')" title="Loyalty" data-page="loyalty">
+      <button class="nav-btn" id="navLoyalty" onclick="showPage('loyalty')" data-page="loyalty">
         <span class="nav-label">CARD</span>
       </button>
-      <button class="nav-btn" id="navTrack" onclick="showPage('track')" title="Track" data-page="track">
+      <button class="nav-btn" id="navTrack" onclick="showPage('track')" data-page="track">
         <span class="nav-label">TRACK</span>
       </button>
       <button class="nav-btn logout-nav-btn" onclick="customerLogout()">
         <span class="nav-label">LOGOUT</span>
-      </button>
-    </div>
-
-    <div class="sidebar-footer">
-      <button class="logout-btn" onclick="customerLogout()" title="Logout">
-        <i class="fa-solid fa-right-from-bracket"></i>
       </button>
     </div>
   </nav>
