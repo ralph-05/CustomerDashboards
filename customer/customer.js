@@ -3470,23 +3470,6 @@ window.searchMenu = (query) => {
   }, 180)
 }
 
-  // Append in chunks to keep scrolling/input responsive
-  const nodes = Array.from(frag.childNodes)
-  menuList.replaceChildren()
-  let i = 0
-  const chunkSize = 18
-  const appendChunk = () => {
-    if (window.__menuRenderToken !== renderToken) return
-    const f = document.createDocumentFragment()
-    for (let c = 0; c < chunkSize && i < nodes.length; c++, i++) {
-      f.appendChild(nodes[i])
-    }
-    menuList.appendChild(f)
-    if (i < nodes.length) requestAnimationFrame(appendChunk)
-  }
-  requestAnimationFrame(appendChunk)
-}
-
 // --- KIOSK ORDER LOGIC ---
 
 // Helper functions for order management
