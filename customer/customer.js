@@ -85,124 +85,30 @@ window.toggleCategoryDropdown = () => {
 
 window.selectCategory = (cat, element) => {
   // Update UI
-  document.querySelectorAll(".cat-pill").forEach(item => item.classList.remove("active"))
+  document.querySelectorAll(".category-item").forEach(item => item.classList.remove("active"))
   element.classList.add("active")
+  document.getElementById("currentCategoryLabel").textContent = cat === 'All' ? 'All Items' : cat
+  
+  // Close dropdown
+  document.getElementById("categoryMenu").classList.remove("show")
   
   // Call existing filter function
-  renderMenu(cat)
+  if (typeof filterCategory === 'function') {
+    filterCategory(cat, element)
+  }
 }
 
-function renderMenu(category) {
-  const menuList = document.getElementById("menuList")
-  if (!menuList) return
-  menuList.replaceChildren()
-
-  const frag = document.createDocumentFragment()
-  const categoryOrder = ["Coffee", "Non-coffee", "Frappe", "Soda", "Pastries", "Uncategorized"]
-  
-  // Filter and group categories
-  const cats = categoryOrder
-    .filter((c) => groupedProducts[c])
-    .concat(Object.keys(groupedProducts).filter((c) => !categoryOrder.includes(c)))
-
-  if (cats.length === 0) {
-    menuList.innerHTML = '<p style="grid-column: 1/-1; padding: 50px; font-size: 18px; text-align:center; color:#fff;">No menu items available.</p>'
-    return
-  }
-
-  cats.forEach((catName) => {
-    if (category !== "All" && category !== catName) return
-
-    const entries = Object.entries(groupedProducts[catName] || {})
-    .filter(([prodName]) => {
-        if (!currentMenuSearch) return true
-        return prodName.toLowerCase().includes(currentMenuSearch)
-    })
-    .sort((a, b) => a[0].localeCompare(b[0]))
-
-    if (entries.length > 0 && category === "All") {
-      const header = document.createElement("div")
-      header.className = "category-header"
-      
-      let icon = ""
-      if (catName.includes("Coffee")) icon = "&#9749;"
-      else if (catName.includes("Non-coffee")) icon = "&#129380;"
-      else if (catName.includes("Frappe")) icon = "&#127848;"
-      else if (catName.includes("Soda")) icon = "&#129380;"
-      else if (catName.includes("Pastries")) icon = "&#129360;"
-      
-      header.innerHTML = `<span>${icon}</span> ${catName}`
-      frag.appendChild(header)
-    }
-
-    entries.forEach(([prodName, sizesArr]) => {
-      const sizes = [...sizesArr].sort((p1, p2) => Number(p1.id || 0) - Number(p2.id || 0))
-      const itemDiv = document.createElement("div")
-      itemDiv.className = "menu-item-card"
-
-      let basePhoto = sizes[0]?.image_url || sizes[0]?.photo || sizes[0]?.image || "../images/tori.jpg"
-      
-      const img = document.createElement("img")
-      img.src = basePhoto
-      img.alt = prodName
-      img.className = "menu-item-img"
-      img.onerror = () => { img.src = "../images/tori.jpg" }
-      itemDiv.appendChild(img)
-
-      const infoDiv = document.createElement("div")
-      infoDiv.className = "menu-item-info"
-
-      const nameH3 = document.createElement("h3")
-      nameH3.textContent = prodName
-      infoDiv.appendChild(nameH3)
-
-      // Temperature buttons for coffee
-      if (catName === "Coffee") {
-        const tempContainer = document.createElement("div")
-        tempContainer.className = "temp-buttons-container"
-        
-        const coldBtn = document.createElement("button")
-        coldBtn.className = "temp-icon-btn"
-        coldBtn.innerHTML = "&#10052;" // Snowflake
-        coldBtn.onclick = () => {
-          coldBtn.classList.add("active")
-          hotBtn.classList.remove("active")
-          itemDiv.dataset.selectedTemp = "Cold"
-        }
-        
-        const hotBtn = document.createElement("button")
-        hotBtn.className = "temp-icon-btn active"
-        hotBtn.innerHTML = "&#9749;" // Coffee cup
-        hotBtn.onclick = () => {
-          hotBtn.classList.add("active")
-          coldBtn.classList.remove("active")
-          itemDiv.dataset.selectedTemp = "Hot"
-        }
-        
-        tempContainer.appendChild(coldBtn)
-        tempContainer.appendChild(hotBtn)
-        infoDiv.appendChild(tempContainer)
-        itemDiv.dataset.selectedTemp = "Hot"
+// Close dropdown when clicking outside
+window.onclick = function(event) {
+  if (!event.target.matches('.category-dropbtn') && !event.target.closest('.category-dropbtn')) {
+    const dropdowns = document.getElementsByClassName("category-dropdown-content");
+    for (let i = 0; i < dropdowns.length; i++) {
+      const openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
       }
-
-      const sizesContainer = document.createElement("div")
-      sizesContainer.className = "menu-item-sizes"
-      
-      sizes.forEach(s => {
-        const sizeBtn = document.createElement("button")
-        sizeBtn.className = "size-price-btn"
-        sizeBtn.innerHTML = `<div>${s.size}</div><div>₱${s.product_price}</div>`
-        sizeBtn.onclick = () => addToCart(s, itemDiv.dataset.selectedTemp || "")
-        sizesContainer.appendChild(sizeBtn)
-      })
-      
-      infoDiv.appendChild(sizesContainer)
-      itemDiv.appendChild(infoDiv)
-      frag.appendChild(itemDiv)
-    })
-  })
-
-  menuList.appendChild(frag)
+    }
+  }
 }
 
 window.customerLogout = () => {
@@ -210,13 +116,6 @@ window.customerLogout = () => {
   localStorage.removeItem("customer_cart")
   localStorage.removeItem("customer_preorder_cart")
   location.href = "../index.html"
-}
-
-window.toggleMobileNav = () => {
-  const sidebar = document.getElementById('mainNav');
-  const overlay = document.querySelector('.mobile-nav-overlay');
-  sidebar.classList.toggle('mobile-active');
-  overlay.classList.toggle('active');
 }
 
 // --- Order Confirmed Modal ---
@@ -3480,6 +3379,196 @@ window.searchMenu = (query) => {
   }, 180)
 }
 
+function renderMenu(category) {
+  const menuList = document.getElementById("menuList")
+  if (!menuList) return
+  menuList.replaceChildren()
+
+  // Batch DOM updates to avoid jank on slower devices
+  const renderToken = Date.now()
+  window.__menuRenderToken = renderToken
+  window.__menuImgIndex = 0
+
+  const frag = document.createDocumentFragment()
+
+  const categoryOrder = ["Coffee", "Non-coffee", "Frappe", "Soda", "Pastries", "Uncategorized"]
+  const cats = categoryOrder
+    .filter((c) => groupedProducts[c])
+    .concat(Object.keys(groupedProducts).filter((c) => !categoryOrder.includes(c)))
+
+  if (cats.length === 0) {
+    menuList.innerHTML = '<p style="grid-column: 1/-1; padding: 50px; font-size: 18px; text-align:center; color:#fff;">No menu items available.</p>'
+    return
+  }
+
+  cats.forEach((catName) => {
+    if (category !== "All" && category !== catName) return
+
+    const entries = Object.entries(groupedProducts[catName] || {})
+    .filter(([prodName]) => {
+        if (!currentMenuSearch) return true
+        return prodName.toLowerCase().includes(currentMenuSearch)
+    })
+    .sort((a, b) => {
+      const nameA = String(a[0] || "")
+        .trim()
+        .toLowerCase()
+      const nameB = String(b[0] || "")
+        .trim()
+        .toLowerCase()
+      if (nameA < nameB) return -1
+      if (nameA > nameB) return 1
+      return 0
+    })
+
+    if (entries.length > 0 && category === "All") {
+      const header = document.createElement("div")
+      header.className = "category-header"
+      
+      // Add icons based on category name
+      let icon = ""
+      if (catName.includes("Coffee")) icon = "&#9749;"
+      else if (catName.includes("Non-coffee")) icon = "&#129380;"
+      else if (catName.includes("Frappe")) icon = "&#127848;"
+      else if (catName.includes("Soda")) icon = "&#129380;"
+      else if (catName.includes("Pastries")) icon = "&#129360;"
+      
+      header.innerHTML = `<span>${icon}</span> ${catName}`
+      frag.appendChild(header)
+    }
+
+    entries.forEach(([prodName, sizesArr]) => {
+      const sizes = [...sizesArr].sort((p1, p2) => Number(p1.id || 0) - Number(p2.id || 0))
+      const itemDiv = document.createElement("div")
+      itemDiv.className = "menu-item-card"
+
+      // Find first available photo from any size variant - try photo_url first, then fallback for legacy data
+      let basePhoto = null
+      for (const sizeItem of sizes) {
+        // Try photo_url first, then fallback to other field names for legacy data
+        basePhoto = sizeItem.image_url || sizeItem.image_url || sizeItem.photo || sizeItem.image_url || sizeItem.image || sizeItem.photoUrl || null
+        if (basePhoto) {
+          break
+        }
+      }
+
+      const hasImage = basePhoto && String(basePhoto).trim() !== ""
+      if (hasImage) {
+        const img = document.createElement("img")
+        img.src = basePhoto
+        img.alt = prodName
+        img.crossOrigin = "anonymous"
+        img.decoding = "async"
+        // Eager-load the first few images for perceived speed
+        const idx = window.__menuImgIndex || 0
+        img.loading = idx < 10 ? "eager" : "lazy"
+        if (idx < 5) img.fetchPriority = "high"
+        window.__menuImgIndex = idx + 1
+        img.className = "menu-item-img"
+        img.onerror = (e) => {
+          console.warn("[v0] Image failed to load:", basePhoto)
+          img.src = "../images/tori.jpg"
+        }
+        itemDiv.appendChild(img)
+      }
+
+      const contentDiv = document.createElement("div")
+      contentDiv.className = "menu-item-info"
+
+      const nameDiv = document.createElement("h3")
+      nameDiv.textContent = prodName
+      contentDiv.appendChild(nameDiv)
+
+      // Add temperature buttons for Coffee category
+      if (catName === "Coffee") {
+        const tempContainer = document.createElement("div")
+        tempContainer.className = "temp-buttons-container"
+        
+        // Helper to update active state
+        const updateActiveState = (selectedTemp) => {
+             const btns = tempContainer.querySelectorAll(".temp-icon-btn")
+             btns.forEach(btn => btn.classList.remove("active"))
+             if (selectedTemp === "Cold") coldBtn.classList.add("active")
+             if (selectedTemp === "Hot") hotBtn.classList.add("active")
+             itemDiv.dataset.selectedTemp = selectedTemp
+        }
+
+        const coldBtn = document.createElement("button")
+        coldBtn.className = "temp-icon-btn"
+        coldBtn.innerHTML = "&#10052;"
+        coldBtn.title = "Cold"
+        coldBtn.onclick = (e) => {
+          e.stopPropagation()
+          updateActiveState("Cold")
+        }
+        
+        const hotBtn = document.createElement("button")
+        hotBtn.className = "temp-icon-btn active"
+        hotBtn.innerHTML = "&#9749;"
+        hotBtn.title = "Hot"
+        hotBtn.onclick = (e) => {
+          e.stopPropagation()
+          updateActiveState("Hot")
+        }
+        
+        // Default to Hot
+        itemDiv.dataset.selectedTemp = "Hot"
+        
+        tempContainer.appendChild(coldBtn)
+        tempContainer.appendChild(hotBtn)
+        contentDiv.appendChild(tempContainer)
+      }
+
+      const sizesContainer = document.createElement("div")
+      sizesContainer.className = "menu-item-sizes"
+      
+      sizes.forEach((p) => {
+        const btn = document.createElement("button")
+        btn.className = "size-price-btn"
+        const price = Number(p.price || p.product_price || 0)
+        
+        if (p.is_available === false) {
+            btn.innerHTML = `<div>${p.size || 'Size'}</div><div>Sold Out</div>`
+            btn.disabled = true
+            btn.style.opacity = "0.6"
+            btn.style.cursor = "not-allowed"
+        } else {
+            btn.innerHTML = `<div>${p.size || 'Size'}</div><div>\u20B1${price.toFixed(2)}</div>`
+            btn.onclick = (e) => {
+              e.stopPropagation()
+              const photo = p.image_url || p.image_url || basePhoto || ""
+              const temperature = catName === "Coffee" ? (itemDiv.dataset.selectedTemp || "Hot") : null
+              if (typeof addToOrder === 'function') {
+                addToOrder(p.id, prodName, price, photo, temperature)
+              }
+            }
+        }
+        sizesContainer.appendChild(btn)
+      })
+      contentDiv.appendChild(sizesContainer)
+
+      itemDiv.appendChild(contentDiv)
+      frag.appendChild(itemDiv)
+    })
+  })
+
+  // Append in chunks to keep scrolling/input responsive
+  const nodes = Array.from(frag.childNodes)
+  menuList.replaceChildren()
+  let i = 0
+  const chunkSize = 18
+  const appendChunk = () => {
+    if (window.__menuRenderToken !== renderToken) return
+    const f = document.createDocumentFragment()
+    for (let c = 0; c < chunkSize && i < nodes.length; c++, i++) {
+      f.appendChild(nodes[i])
+    }
+    menuList.appendChild(f)
+    if (i < nodes.length) requestAnimationFrame(appendChunk)
+  }
+  requestAnimationFrame(appendChunk)
+}
+
 // --- KIOSK ORDER LOGIC ---
 
 // Helper functions for order management
@@ -5115,3 +5204,23 @@ window.addWheelWinnerToCart = () => {
     console.error("addToOrder function not found!");
   }
 };
+
+window.toggleMobileNav = () => {
+  const sidebar = document.getElementById('mainNav');
+  const overlay = document.querySelector('.mobile-nav-overlay');
+  if (sidebar) sidebar.classList.toggle('mobile-active');
+  if (overlay) overlay.classList.toggle('active');
+}
+
+window.selectCategory = (cat, element) => {
+  if (typeof renderMenu === 'function') {
+    renderMenu(cat);
+  }
+}
+
+window.customerLogout = () => {
+  localStorage.removeItem("customer_auth")
+  localStorage.removeItem("customer_cart")
+  localStorage.removeItem("customer_preorder_cart")
+  location.href = "../index.html"
+}

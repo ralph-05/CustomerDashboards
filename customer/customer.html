@@ -15,26 +15,31 @@
   <script src="../supabase-init.js"></script>
 </head>
 <body>
-  <!-- Dashboard Header (Matched to Debug Image) -->
+  <!-- Dashboard Header (Matched to Provided Image) -->
   <header class="dashboard-header">
     <div class="header-left">
+      <div class="header-logo" onclick="location.href='../index.html'">
+        <img src="../images/tori.jpg" alt="Tori Logo">
+      </div>
+    </div>
+    <div class="header-right">
       <button class="burger-menu-btn" onclick="toggleMobileNav()">
         <i class="fa-solid fa-bars"></i>
       </button>
     </div>
-    <div class="header-right">
-      <div class="top-actions">
-        <button id="orderDrawerBtn" class="action-btn cart-btn" onclick="toggleOrderDrawer()">
-          <i class="fa-solid fa-cart-shopping"></i>
-          <span class="badge" id="orderCartBadge"></span>
-        </button>
-        <button id="customerBell" class="action-btn bell-btn" onclick="openCustomerNotifications()">
-          <i class="fa-solid fa-bell"></i>
-          <span id="customerBellBadge" class="bell-badge"></span>
-        </button>
-      </div>
-    </div>
   </header>
+
+  <!-- Floating Actions (Vertical Stack on Right) -->
+  <div class="floating-actions">
+    <button id="orderDrawerBtn" class="action-btn cart-btn" onclick="toggleOrderDrawer()">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span class="badge" id="orderCartBadge"></span>
+    </button>
+    <button id="customerBell" class="action-btn bell-btn" onclick="openCustomerNotifications()">
+      <i class="fa-solid fa-bell"></i>
+      <span id="customerBellBadge" class="bell-badge"></span>
+    </button>
+  </div>
 
   <!-- Navigation Menu (Slide-out Overlay) -->
   <nav id="mainNav" class="sidebar-nav">

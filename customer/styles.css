@@ -1,4 +1,4 @@
-/* CUSTOMER DASHBOARD - ULTIMATE PREMIUM UI */
+/* CUSTOMER DASHBOARD - EXACT IMAGE MATCH DESIGN */
 @import url("../global-styles.css");
 
 * {
@@ -12,7 +12,6 @@
   --cream: #F8F4E1;
   --white: #FFFFFF;
   --black: #000000;
-  --preorder-accent: #c96e48;
   
   --font-inter: 'Inter', sans-serif;
   --font-slab: 'Roboto Slab', serif;
@@ -21,11 +20,13 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #543310; /* Solid Brown Dashboard Background */
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="80" stroke="%23ffffff" stroke-width="15" fill="none" opacity="0.03"/><circle cx="100" cy="100" r="50" stroke="%23ffffff" stroke-width="10" fill="none" opacity="0.02"/><circle cx="100" cy="100" r="25" stroke="%23ffffff" stroke-width="5" fill="none" opacity="0.01"/></svg>');
-  background-size: 400px;
-  background-repeat: repeat;
+  background: linear-gradient(135deg, #AF8F6F 0%, #74512D 50%, #543310 100%);
   background-attachment: fixed;
+  background-image: 
+    linear-gradient(135deg, rgba(175, 143, 111, 0.9) 0%, rgba(116, 81, 45, 0.9) 50%, rgba(84, 51, 16, 0.9) 100%),
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="80" stroke="%23ffffff" stroke-width="15" fill="none" opacity="0.05"/><circle cx="100" cy="100" r="50" stroke="%23ffffff" stroke-width="10" fill="none" opacity="0.03"/><circle cx="100" cy="100" r="25" stroke="%23ffffff" stroke-width="5" fill="none" opacity="0.02"/></svg>');
+  background-size: cover, 400px;
+  background-repeat: no-repeat, repeat;
   font-family: var(--font-inter);
   color: white;
   display: block;
@@ -33,46 +34,47 @@ body {
   overflow-x: hidden;
 }
 
-/* --- PREMIUM FIXED HEADER --- */
+/* --- HEADER (LOGO LEFT, BURGER RIGHT) --- */
 .dashboard-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 90px;
-  background: #543310; /* Solid background to prevent overlap transparency issues */
+  height: 80px;
+  background: #543310;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 30px;
+  padding: 0 20px;
   z-index: 1050;
-  box-shadow: 0 5px 25px rgba(0,0,0,0.5);
   border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.header-logo img {
+  height: 50px;
+  background: white;
+  padding: 5px;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 .burger-menu-btn {
   background: none;
   border: none;
   color: white;
-  font-size: 36px;
+  font-size: 32px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 60px;
-  height: 60px;
-  transition: all 0.3s ease;
 }
 
-.burger-menu-btn:hover {
-  background: rgba(255,255,255,0.05);
-  border-radius: 50%;
-}
-
-.header-right .top-actions {
+/* --- FLOATING ACTIONS (VERTICAL STACK ON RIGHT) --- */
+.floating-actions {
+  position: fixed;
+  top: 100px;
+  right: 20px;
   display: flex;
-  align-items: center;
-  gap: 20px;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 1040;
 }
 
 .action-btn {
@@ -84,366 +86,275 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
   position: relative;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.action-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.4);
 }
 
 .action-btn i {
-  font-size: 26px;
-  color: #333;
+  font-size: 24px;
+  color: #000;
 }
 
 .bell-btn i {
-  color: #FFD700;
+  color: #FFD700; /* Yellow Bell */
 }
 
 .action-btn .badge, 
 .action-btn .bell-badge {
   position: absolute;
-  top: -2px;
-  right: -2px;
+  top: 0;
+  right: 0;
   background: #FFD700;
   color: #000;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  font-size: 13px;
-  font-weight: 900;
+  font-size: 12px;
+  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 2px solid white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 /* --- SIDEBAR NAVIGATION --- */
 .sidebar-nav {
   position: fixed !important;
   top: 0 !important;
-  left: -100% !important; 
-  width: 320px !important;
-  max-width: 85% !important;
+  right: -320px !important; /* Slide from RIGHT as per standard burger position */
+  width: 300px !important;
   height: 100vh !important;
   background: #543310 !important;
   display: flex !important;
   flex-direction: column !important;
-  padding: 100px 30px 40px 30px !important;
-  transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  padding: 80px 30px !important;
+  transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
   z-index: 1100 !important;
-  box-shadow: 20px 0 60px rgba(0,0,0,0.7) !important;
-  border-right: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: -10px 0 40px rgba(0,0,0,0.5) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-nav.mobile-active {
-  left: 0 !important;
+  right: 0 !important;
 }
 
 .sidebar-header {
   position: absolute;
-  top: 30px;
+  top: 25px;
   right: 25px;
 }
 
 .menu-close-btn {
-  background: rgba(255,255,255,0.1);
+  background: none;
   border: none;
   color: white;
   font-size: 32px;
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s;
-}
-
-.menu-close-btn:hover {
-  background: rgba(217, 83, 79, 0.2);
-  color: #ff6b6b;
 }
 
 .nav-links {
   display: flex !important;
   flex-direction: column !important;
-  gap: 18px !important;
+  gap: 15px !important;
+  width: 100% !important;
 }
 
 .nav-btn {
   width: 100% !important;
-  padding: 20px 25px !important;
+  padding: 16px 20px !important;
   display: flex !important;
   align-items: center !important;
-  gap: 20px !important;
-  border-radius: 18px !important;
+  gap: 15px !important;
+  border-radius: 12px !important;
   background: rgba(255, 255, 255, 0.05) !important;
   color: white !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
-  font-size: 18px !important;
-  font-weight: 800 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
   cursor: pointer !important;
-  transition: all 0.3s !important;
-  text-align: left !important;
-}
-
-.nav-btn i {
-  font-size: 24px !important;
-  width: 35px !important;
-  text-align: center !important;
-  color: #AF8F6F !important;
-}
-
-.nav-btn:hover {
-  background: rgba(175, 143, 111, 0.15) !important;
-  transform: translateX(10px);
 }
 
 .nav-btn.active {
   background: #AF8F6F !important;
   border: none !important;
-  box-shadow: 0 10px 30px rgba(175, 143, 111, 0.4) !important;
 }
 
-.nav-btn.active i { color: white !important; }
-
-.logout-nav-btn {
-  margin-top: 40px !important;
-  background: rgba(217, 83, 79, 0.1) !important;
-  border-color: rgba(217, 83, 79, 0.2) !important;
-  color: #ff6b6b !important;
-}
-
-/* --- MAIN CONTENT LAYOUT --- */
+/* --- MAIN PAGE CONTENT --- */
 .page {
-  margin-top: 110px !important;
-  padding: 20px 5% 80px 5% !important;
+  margin-top: 90px !important;
+  padding: 20px 5% 60px 5% !important;
   width: 100% !important;
-  max-width: 1300px;
-  margin-left: auto;
-  margin-right: auto;
-  min-height: calc(100vh - 110px);
 }
 
-/* Premium Card Design */
-.card-base, .loyalty-main-card, .booking-options-card, .track-main-content {
-  background: #FFFFFF !important;
-  border-radius: 35px !important;
-  padding: 50px !important;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.4) !important;
-  color: #333 !important;
-  border: none !important;
-  margin-bottom: 40px !important;
-  overflow: hidden;
-  position: relative;
+/* --- MENU SECTION (EXACT IMAGE MATCH) --- */
+.menu-top-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
 }
 
-/* --- MENU SECTION --- */
 .category-dropdown-select {
   width: 100%;
-  max-width: 320px;
-  padding: 18px 30px;
-  border-radius: 15px;
-  background: #F8F4E1;
+  max-width: 250px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  background: #F8F4E1; /* Cream dropdown */
   color: #000;
-  font-weight: 900;
-  font-size: 22px;
+  font-weight: 700;
+  font-size: 18px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-  margin-bottom: 25px;
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 25px center;
-  background-size: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .search-bar-container {
   width: 100%;
   background: white;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-  margin-bottom: 50px;
-  border: 2px solid rgba(0,0,0,0.05);
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .menu-search-input {
   width: 100%;
   border: none;
-  padding: 22px 30px;
-  font-size: 20px;
+  padding: 12px 15px;
+  font-size: 16px;
+  border-radius: 5px;
   outline: none;
-  background: transparent;
-  color: #000;
 }
 
 .category-header {
   grid-column: 1 / -1;
   font-family: var(--font-slab);
-  font-size: 38px;
+  font-size: 28px;
   color: white;
-  margin: 50px 0 25px;
+  margin: 20px 0 10px;
   display: flex;
   align-items: center;
-  gap: 20px;
-  border-bottom: 4px solid white;
-  padding-bottom: 20px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  gap: 12px;
+  border-bottom: 2px solid white; /* White line under category */
+  padding-bottom: 8px;
+}
+
+.category-header i {
+  font-size: 24px;
 }
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 40px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
 }
 
+/* Menu Item Card */
 .menu-item-card {
-  background: #F8F4E1;
-  border-radius: 30px;
+  background: #F8F4E1; /* Cream Card */
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 15px 45px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  color: #000;
   display: flex;
   flex-direction: column;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.menu-item-card:hover {
-  transform: translateY(-15px) scale(1.02);
 }
 
 .menu-item-img {
   width: 100%;
-  height: 260px;
+  height: 200px;
   object-fit: cover;
 }
 
 .menu-item-info {
-  padding: 30px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 15px;
 }
 
 .menu-item-info h3 {
-  font-size: 28px;
+  font-size: 22px;
   margin: 0;
-  font-weight: 900;
-  font-family: var(--font-slab);
-  color: #543310;
+  font-weight: 800;
+}
+
+.temp-buttons-container {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.temp-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #000;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.temp-icon-btn.active {
+  background: #AF8F6F;
+}
+
+.menu-item-sizes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
 .size-price-btn {
-  background: #AF8F6F;
-  border-radius: 15px;
-  padding: 16px;
+  background: #AF8F6F; /* Light Brown Buttons */
+  border-radius: 8px;
+  padding: 10px;
   color: white;
-  font-weight: 900;
+  font-weight: 700;
   border: none;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 18px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  font-size: 14px;
 }
 
-/* --- BOOKING SECTION RESTORATION --- */
-.booking-options-card { text-align: center; }
-.choose-transaction-label { 
-  background: var(--tan-dark); 
-  color: var(--white); 
-  padding: 12px 35px; 
-  border-radius: 50px; 
-  font-weight: 900; 
-  display: inline-block; 
-  margin-bottom: 50px;
-  font-size: 18px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+.size-price-btn div:first-child {
+  font-size: 11px;
+  font-weight: 400;
 }
 
-.booking-cards-container { 
-  display: flex; 
-  gap: 40px; 
-  justify-content: center; 
-  margin-bottom: 50px; 
+/* --- OTHER SECTIONS RESTORATION (PREMIUM CARDS) --- */
+.card-base, .loyalty-main-card, .booking-options-card, .track-main-content {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  color: #333;
+  margin-bottom: 25px;
 }
-
-.booking-choice-card { 
-  background: var(--tan-dark); 
-  color: var(--white); 
-  flex: 1; 
-  height: 240px; 
-  border-radius: 25px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  cursor: pointer; 
-  padding: 40px;
-  transition: all 0.4s ease;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-}
-
-.booking-choice-card:hover {
-  background: var(--tan-light);
-  transform: translateY(-12px);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-}
-
-.choice-title { font-size: 36px; font-weight: 900; font-family: var(--font-slab); }
-
-.booking-description { 
-  color: #444; 
-  font-size: 20px; 
-  line-height: 2; 
-  background: #fdfbf7; 
-  padding: 40px; 
-  border-radius: 25px;
-  border: 2px solid #f0e6d6;
-  text-align: left;
-}
-
-/* --- TRACK SECTION PREMIUM --- */
-.track-table { width: 100%; border-collapse: separate; border-spacing: 0 15px; }
-.track-table th { background: #f8f8f8; color: #999; padding: 20px; text-align: left; font-weight: 900; text-transform: uppercase; font-size: 15px; border-radius: 12px; }
-.track-table td { padding: 25px 20px; background: #fff; border-top: 1.5px solid #f0f0f0; border-bottom: 1.5px solid #f0f0f0; font-weight: 700; color: #333; font-size: 17px; }
-.track-table tr td:first-child { border-left: 1.5px solid #f0f0f0; border-radius: 20px 0 0 20px; }
-.track-table tr td:last-child { border-right: 1.5px solid #f0f0f0; border-radius: 0 20px 20px 0; }
-
-/* Status Badges */
-.status-pill { padding: 8px 20px; border-radius: 30px; font-weight: 900; font-size: 14px; text-transform: uppercase; }
-.status-paid { background: #e8f5e9; color: #2e7d32; }
-.status-pending { background: #fff3e0; color: #ef6c00; }
 
 /* Overlay & Toast */
-.mobile-nav-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 1090; }
-.mobile-nav-overlay.active { display: block; }
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(5px);
+  z-index: 1090;
+}
 
-/* --- RESPONSIVE OPTIMIZATIONS --- */
+.mobile-nav-overlay.active {
+  display: block;
+}
+
 @media (max-width: 768px) {
-  .dashboard-header { height: 85px; padding: 0 20px; }
-  .burger-menu-btn { font-size: 32px; width: 50px; height: 50px; }
-  .action-btn { width: 55px; height: 55px; }
-  .action-btn i { font-size: 22px; }
-  .page { margin-top: 105px !important; padding: 0 20px 60px 20px !important; }
-  .card-base, .loyalty-main-card, .booking-options-card, .track-main-content { padding: 35px 25px !important; border-radius: 30px !important; }
-  .booking-cards-container { flex-direction: column; gap: 20px; }
-  .booking-choice-card { height: 180px; padding: 30px; }
-  .choice-title { font-size: 28px; }
-  .booking-description { font-size: 17px; padding: 25px; }
-  .category-dropdown-select { font-size: 18px; max-width: 100%; }
-  .menu-search-input { font-size: 18px; padding: 18px 25px; }
-  .category-header { font-size: 30px; }
-  .track-table th { display: none; }
-  .track-table td { display: flex; justify-content: space-between; width: 100%; border: none !important; padding: 12px 20px; text-align: right; }
-  .track-table td::before { content: attr(data-label); font-weight: 900; color: #999; text-align: left; margin-right: 20px; }
-  .track-table tr { display: block; background: #fff; border-radius: 25px; margin-bottom: 25px; padding: 15px 0; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border: 1.5px solid #f0f0f0; }
+  .dashboard-header { height: 70px; }
+  .page { margin-top: 80px !important; }
 }
