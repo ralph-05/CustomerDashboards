@@ -843,57 +843,48 @@ h3 {
 
 .nav-btn {
   display: flex;
-  flex-direction: row; /* Horizontal layout for sidebar items */
+  flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  padding: 0 30px;
+  padding: 0 24px;
   width: 100%;
-  height: 60px;
+  height: 56px;
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   color: var(--tan-dark);
-  gap: 15px;
+  gap: 16px;
   position: relative;
+  text-decoration: none;
 }
 
 .nav-btn i {
-  font-size: 20px;
+  font-size: 18px;
   width: 24px;
+  display: flex;
+  justify-content: center;
 }
 
 .nav-label {
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 0.95rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   color: inherit;
   font-family: var(--font-inter);
+  display: block !important; /* Ensure label is always visible */
 }
 
 .nav-btn:hover {
-  background: rgba(175, 143, 111, 0.1);
+  background: rgba(175, 143, 111, 0.08);
 }
 
 .nav-btn.active {
   background: var(--bg-cream);
   color: var(--tan-dark);
   border-right: 4px solid var(--tan-dark);
-}
-
-.nav-btn.active::before {
-  display: none; /* Remove the vertical bar if it exists */
-}
-
-/* Looking at the reference image, the active state is rounded on both sides or just right? 
-It looks like a rounded pill shape that is partially hidden on the left. 
-Actually, it looks like a pill shape. */
-.nav-btn.active {
-  background: #F8F4E1;
-  border-radius: 15px;
-  margin: 0 10px;
-  width: calc(100% - 20px);
+  font-weight: 700;
 }
 
 .sidebar-footer {
@@ -2875,6 +2866,11 @@ h1 {
 
 /* Desktop: avoid "floating" cart button over content */
 @media (min-width: 1025px) {
+  .page {
+    padding: 60px 10%; /* Center content more on laptop */
+    padding-top: 130px !important;
+  }
+
   .order-drawer-btn {
     top: auto;
     bottom: 24px;
@@ -2936,6 +2932,13 @@ h1 {
   100% { transform: rotate(360deg); }
 }
 
+@media (min-width: 1441px) {
+  .page {
+    padding: 60px 20%; /* Even more centering on large screens */
+    padding-top: 150px !important;
+  }
+}
+
 @media (max-width: 1024px) {
   body {
     flex-direction: column;
@@ -2954,6 +2957,16 @@ h1 {
 
   .menu-grid {
     grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .track-section h3 {
+    font-size: 20px !important;
+    margin: 25px 0 15px 0 !important;
+  }
+
+  .track-table th, .track-table td {
+    padding: 12px 15px !important;
+    font-size: 14px !important;
   }
 
   .floating-actions {
@@ -3362,49 +3375,164 @@ h1 {
 
 /* --- RESPONSIVE DESIGN --- */
 
-/* Tablet & Large Mobile (1024px and below) */
+/* Tablet & Mobile (1024px and below) */
 @media (max-width: 1024px) {
   body {
-    margin-left: 0 !important;
-    padding: 10px !important;
     display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .page {
-    margin-left: 0 !important;
-    padding: 20px !important;
-    padding-top: 90px !important; /* Adjust for fixed header on mobile */
-    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 15px !important;
+    padding-top: 85px !important;
     width: 100% !important;
-    border-radius: 0 !important;
+    max-width: 100% !important;
     box-shadow: none !important;
   }
 
-  body {
-    padding-bottom: env(safe-area-inset-bottom) !important;
+  /* Compact Grids */
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
   }
 
-  .order-drawer-btn {
-    bottom: 20px !important;
-    top: auto !important;
-    right: 20px !important;
-    transform: none !important;
-    width: 56px !important;
-    height: 56px !important;
-    border-radius: 50% !important;
-    align-items: center !important;
-    justify-content: center !important;
+  /* Compact Cards */
+  .booking-options-card,
+  .loyalty-main-card,
+  .track-main-content {
+    padding: 20px !important;
+    border-radius: 20px !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
-  .order-drawer-btn.preorder-btn {
-    bottom: 90px !important; /* Move it above the regular order drawer btn */
+  .booking-cards-container {
+    flex-direction: column !important;
+    gap: 15px !important;
   }
 
-  .customer-bell {
-    top: 80px !important; /* Below header */
-    right: 20px !important;
+  .booking-choice-card {
+    height: 120px !important;
+  }
+
+  .choice-title {
+    font-size: 22px !important;
+  }
+
+  .loyalty-card-id-section {
+    padding: 15px !important;
+  }
+
+  .card-id-display-box {
+    padding: 10px 15px !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .card-id-display-box span {
+    font-size: 24px !important;
+    letter-spacing: 2px !important;
+  }
+
+  .balance-amount {
+    font-size: 48px !important;
+  }
+
+  .loyalty-stamps-section {
+    padding: 20px !important;
+  }
+
+  .stamps-header h3 {
+    font-size: 18px !important;
+  }
+
+  .stamps-header p {
+    font-size: 14px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .loyalty-stamp-grid {
+    gap: 10px !important;
+  }
+
+  .loyalty-stamp-slot {
+    font-size: 24px !important;
+    border-radius: 10px !important;
+  }
+
+  .redeem-btn {
+    padding: 15px 30px !important;
+    font-size: 18px !important;
+    border-radius: 10px !important;
+  }
+
+  .balance-label {
+    font-size: 18px !important;
+  }
+
+  .promo-title, .loyalty-title, .track-title, .wheel-title {
+    font-size: 24px !important;
+    text-align: left !important;
+  }
+
+  .menu-top-section {
+    gap: 15px !important;
+    margin-bottom: 25px !important;
+  }
+
+  .menu-search-input {
+    padding: 12px 18px !important;
+    font-size: 16px !important;
+  }
+
+  .category-dropbtn {
+    padding: 10px 15px !important;
+    font-size: 16px !important;
+  }
+
+  .floating-actions {
+    top: 80px !important;
+    right: 15px !important;
+    flex-direction: row !important;
+    gap: 10px !important;
+  }
+
+  .action-btn {
     width: 44px !important;
     height: 44px !important;
+    font-size: 1.1rem !important;
+  }
+
+  .action-btn .badge, .action-btn .bell-badge {
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 10px !important;
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 480px) {
+  .menu-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .page {
+    padding: 10px !important;
+    padding-top: 80px !important;
+  }
+
+  .promo-card-new .promo-info-new {
+    padding: 20px !important;
+  }
+
+  .promo-title-new {
+    font-size: 1.5rem !important;
+  }
+
+  .promo-details-new {
+    font-size: 1rem !important;
   }
 }
 
@@ -3754,10 +3882,6 @@ h1 {
     width: 28px !important;
     height: 28px !important;
     font-size: 20px !important;
-  }
-
-  .nav-label {
-    display: none !important;
   }
 
   .order-drawer-btn {
