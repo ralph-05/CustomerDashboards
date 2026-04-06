@@ -2384,13 +2384,15 @@ function submitBooking() {
   const [year, month, day] = date.split("-").map(Number)
   const selectedDate = new Date(year, month - 1, day, 0, 0, 0, 0)
 
-  if (!isPreorder && selectedDate <= today) {
-    showMessage("Bookings must be made at least 1 day in advance.", "error", msgContainer)
+  // Block previous dates for everyone
+  if (selectedDate < today) {
+    showMessage("Date cannot be in the past.", "error", msgContainer)
     return
   }
-  
-  if (isPreorder && selectedDate < today) {
-    showMessage("Pre-order date cannot be in the past.", "error", msgContainer)
+
+  // Pre-orders can be same day, but visits must be tomorrow
+  if (!isPreorder && selectedDate <= today) {
+    showMessage("Bookings must be made at least 1 day in advance.", "error", msgContainer)
     return
   }
 
@@ -2483,13 +2485,12 @@ function submitBooking() {
           proofUrl = publicUrl
       }
 
-      // Check for day availability
+      // Check for day availability (Already implemented logic to check for existing table bookings)
       const checkDay = db.from("bookings")
-        .select("status, type")
+        .select("status, type, check_in_time, check_out_time")
         .eq("date", date)
         .eq("status", "accepted")
         
-      // Slot check is relaxed to date-level; we still allow multiple ranges in a day
       const checkSlot = db.from("bookings")
         .select("*")
         .eq("date", date)
@@ -2508,7 +2509,9 @@ function submitBooking() {
       if (dayRes.data && dayRes.data.length > 0) {
           const hasTableBooking = dayRes.data.some(b => b.type === 'visit' || b.type === 'book')
           if (hasTableBooking && (type === 'visit' || type === 'book')) {
-             throw new Error("This date already has a table booking. Only pre-orders are allowed.")
+             // Logic: If there's already a visit booking on this date, we must check if time overlaps
+             // To simplify and avoid double visit booking on same date entirely as requested:
+             throw new Error("This date is already booked for a visit. Please choose another date or time.")
           }
       }
 

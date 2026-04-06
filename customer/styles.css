@@ -516,20 +516,76 @@ body {
 }
 
 .loyalty-main-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 40px;
-  padding: 60px;
+  background: white;
+  border-radius: 30px;
+  padding: 40px;
   width: 100%;
-  max-width: 900px;
+  max-width: 600px;
   margin: 0 auto;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  gap: 30px;
+  border: 1px solid #eee;
+}
+
+.loyalty-header-mobile {
+  display: none;
+  font-family: var(--font-slab);
+  font-size: 28px;
+  color: var(--coffee-dark);
+  margin-bottom: 20px;
+  text-align: center;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .loyalty-header-mobile {
+    display: block;
+  }
+  
+  #loyalty .loyalty-title {
+    display: none !important;
+  }
+
+  .loyalty-main-card {
+    padding: 20px !important;
+    border-radius: 20px !important;
+    background: white !important;
+    backdrop-filter: none !important;
+    border: none !important;
+  }
+
+  .loyalty-card-id-section {
+    padding: 15px !important;
+    border-radius: 15px !important;
+  }
+
+  .card-id-display-box {
+    padding: 12px 15px !important;
+  }
+
+  .card-id-display-box span {
+    font-size: 28px !important;
+    letter-spacing: 2px !important;
+  }
+
+  .loyalty-stamps-section {
+    padding: 25px !important;
+    border-radius: 15px !important;
+  }
+
+  .loyalty-stamp-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .loyalty-stamp-slot {
+    aspect-ratio: 1 !important;
+    height: auto !important;
+    font-size: 20px !important;
+  }
 }
 
 .loyalty-card-id-section {
