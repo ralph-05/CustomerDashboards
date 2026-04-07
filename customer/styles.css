@@ -939,6 +939,7 @@ h3 {
   box-shadow: none !important;
   position: relative;
   z-index: 2001;
+  margin-right: 0; /* Ensure it's flush right */
 }
 
 .menu-close-btn:hover {
