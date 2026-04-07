@@ -789,8 +789,12 @@
       .about-bottom-grid { grid-template-columns: 1fr; }
     }
 
-    /* Mobile Adjustments */
+    @media (min-width: 769px) {
+      .btn-signin-mobile { display: none !important; }
+    }
+
     @media (max-width: 768px) {
+      .desktop-only-signin { display: none !important; }
       .navbar { 
         padding: 15px 20px; 
         justify-content: space-between; 
@@ -801,16 +805,35 @@
       .nav-left-content { gap: 0; }
       .nav-logo img { height: 45px; width: 45px; }
       
+      .nav-right-mobile-group {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
       .mobile-menu-btn { 
         display: block; 
         background: none;
         border: none;
-        padding: 5px;
+        padding: 0;
         margin: 0;
         box-shadow: none;
-        color: white;
+        color: #000 !important; /* Black icon only */
         font-size: 24px;
         cursor: pointer;
+        order: 1; 
+      }
+
+      .btn-signin-mobile {
+        display: block !important;
+        background: transparent;
+        color: white;
+        border: 1.5px solid white;
+        padding: 6px 15px;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 600;
+        order: 2; /* Sign in to the right of burger */
       }
       
       .nav-links { 
@@ -913,13 +936,18 @@
       <a href="javascript:void(0)" onclick="navigateTo('menu')" id="nav-menu">Menu</a>
       <a href="javascript:void(0)" onclick="navigateTo('wheel')" id="nav-wheel">Wheel</a>
       <a href="javascript:void(0)" onclick="navigateTo('about')" id="nav-about">About</a>
-      <button onclick="openAuthModal()" class="btn-signin">Sign in</button>
+      <button onclick="openAuthModal()" class="btn-signin desktop-only-signin">Sign in</button>
     </div>
 
-    <!-- Mobile Menu Button -->
-    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-      <i class="fas fa-bars"></i>
-    </button>
+    <div class="nav-right-mobile-group">
+      <!-- Mobile Menu Button -->
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <!-- Sign in button outside burger for mobile -->
+      <button onclick="openAuthModal()" class="btn-signin-mobile">Sign in</button>
+    </div>
   </nav>
 
   <!-- HOME VIEW -->
