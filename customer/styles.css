@@ -870,17 +870,27 @@ h3 {
 }
 
 .sidebar-header {
-  padding: 20px;
+  padding: 15px 20px;
   display: flex;
   justify-content: flex-end;
+  width: 100%;
 }
 
 .menu-close-btn {
   background: transparent;
   border: none;
-  font-size: 24px;
+  font-size: 28px;
   cursor: pointer;
   color: var(--tan-dark);
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.menu-close-btn:hover {
+  transform: rotate(90deg);
 }
 
 .mobile-nav-overlay {
@@ -3373,7 +3383,7 @@ h1 {
 
   /* Compact Grids */
   .menu-grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px !important;
   }
 
