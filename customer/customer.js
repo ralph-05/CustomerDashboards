@@ -1645,6 +1645,12 @@ function showPage(page) {
   }
   if (page === "spin") {
     initWheel()
+    // Show tap hint when navigating to wheel
+    const hint = document.getElementById('customerTapHint');
+    if (hint) {
+      hint.style.display = 'block';
+      setTimeout(() => { hint.style.opacity = '1'; }, 10);
+    }
     setTimeout(() => {
       if (window.__customerCurrentPage === "spin") {
         initWheel()
@@ -5246,6 +5252,122 @@ window.selectCategory = (cat, element) => {
     renderMenu(cat);
   }
 }
+
+// Load and display promos
+window.loadPromos = async () => {
+  const promoList = document.getElementById('promoList');
+  if (!promoList) return;
+
+  try {
+    promoList.innerHTML = '<div class="promo-loading">Loading promos...</div>';
+
+    let promos = [];
+
+    // Try to load from Supabase if available
+    if (typeof db !== 'undefined' && db && db.from) {
+      try {
+        const { data, error } = await db
+          .from('promos')
+          .select('*')
+          .eq('is_active', true)
+          .order('created_at', { ascending: false });
+
+        if (!error && data) {
+          promos = data;
+        }
+      } catch (e) {
+        // Supabase not available
+      }
+    }
+
+    // Try to load from localStorage as fallback
+    if (!promos || promos.length === 0) {
+      try {
+        const storedPromos = localStorage.getItem('customer_promos');
+        if (storedPromos) {
+          promos = JSON.parse(storedPromos);
+        }
+      } catch (e) {
+        // No stored promos found
+      }
+    }
+
+    // Render promos or show empty state
+    if (!promos || promos.length === 0) {
+      promoList.innerHTML = '<div class="promo-empty-state">No active promos available right now. Check back soon!</div>';
+      return;
+    }
+
+    promoList.innerHTML = '';
+    promos.forEach(promo => {
+      const promoCard = createPromoCard(promo);
+      promoList.appendChild(promoCard);
+    });
+  } catch (error) {
+    console.error('Error loading promos:', error);
+    promoList.innerHTML = '<div class="promo-empty-state">Error loading promos. Please refresh the page.</div>';
+  }
+}
+
+// Subscribe to real-time promo updates from Supabase
+window.subscribeToPromosRealtime = () => {
+  if (typeof db === 'undefined' || !db || !db.from) return;
+
+  try {
+    db.from('promos')
+      .on('*', payload => {
+        // Reload promos when changes are detected
+        if (document.getElementById('promoList')) {
+          loadPromos();
+        }
+      })
+      .subscribe();
+  } catch (error) {
+    // Real-time subscription not available
+  }
+}
+
+// Create a promo card DOM element
+function createPromoCard(promo) {
+  const card = document.createElement('div');
+  card.className = 'promo-card';
+
+  // Format date
+  const promoDate = new Date(promo.created_at || promo.date);
+  const dateStr = promoDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+  // Get image URL or use placeholder
+  const imageUrl = promo.image_url || promo.photo || promo.image || '';
+
+  card.innerHTML = `
+    ${imageUrl ? `<img src="${imageUrl}" alt="${promo.title || 'Promo'}" class="promo-card-image" onerror="this.style.display='none'">` : ''}
+    <div class="promo-card-content">
+      <h3 class="promo-card-title">${promo.title || 'Special Offer'}</h3>
+      <p class="promo-card-description">${promo.description || promo.details || 'Limited time offer'}</p>
+      <div class="promo-card-details">
+        <span class="promo-card-date">${dateStr}</span>
+        ${promo.discount ? `<span style="color: var(--danger); font-weight: 600;">${promo.discount}</span>` : ''}
+      </div>
+    </div>
+  `;
+
+  return card;
+}
+
+// Initialize promos when page loads or navigates to promo section
+function initializePromos() {
+  if (typeof subscribeToPromosRealtime === 'function') {
+    subscribeToPromosRealtime();
+  }
+  loadPromos();
+}
+
+// Hook into page navigation
+window.addEventListener('show-page', (e) => {
+  if (e.detail && e.detail.page === 'promos') {
+    initializePromos();
+  }
+});
 
 window.customerLogout = () => {
   localStorage.removeItem("customer_auth")

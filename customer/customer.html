@@ -72,7 +72,7 @@
         <i class="fa-solid fa-truck-fast"></i>
         <span class="nav-label">TRACK</span>
       </button>
-      <button class="nav-btn logout-nav-btn" onclick="customerLogout()">
+      <button class="nav-btn" onclick="customerLogout()" style="transition: opacity 0.2s ease;">
         <i class="fa-solid fa-right-from-bracket"></i>
         <span class="nav-label">LOGOUT</span>
       </button>
@@ -392,7 +392,6 @@
   <div id="spin" class="page" style="display:none;">
     <div class="wheel-header-container">
       <h2 class="wheel-title">Spin the Wheel!</h2>
-      <hr class="wheel-underline">
     </div>
 
     <div class="wheel-dashboard-layout">
@@ -439,12 +438,6 @@
           </div>
           <span class="wheel-spark">✨</span>
         </div>
-
-        <div class="wheel-action-footer">
-          <button id="spinBtn" class="spin-action-btn" onclick="spinTheWheel()">
-            SPIN THE WHEEL
-          </button>
-        </div>
         
         <!-- Move Add Cart Button Bellow Winner Box -->
         <div class="wheel-action-footer">
@@ -486,7 +479,6 @@
   <div id="book" class="page" style="display:none;">
     <div class="book-header-container">
       <h2 class="book-title">Book a Visit or Pre-Order?</h2>
-      <hr class="book-underline">
     </div>
 
     <div class="booking-options-card">
@@ -526,7 +518,7 @@
       <h3 style="margin-top:0;">Pre-order Setup</h3>
       <div id="preorderSetupMsg"></div>
       <label style="font-weight:600; display:block; margin: 10px 0 6px;">Pickup Date <span style="color: var(--danger);">*</span></label>
-      <input id="preorderPickupDate" type="date" class="input-field" min="" max="">
+      <input id="preorderPickupDate" type="date" class="input-field">
       <label style="font-weight:600; display:block; margin: 10px 0 6px;">Pickup Time <span style="color: var(--danger);">*</span></label>
       <input id="preorderPickupTime" type="time" class="input-field" min="08:00" max="18:00">
       <div class="modal-buttons" style="display:flex; gap:10px; margin-top: 16px;">
@@ -543,7 +535,7 @@
       <h3 style="margin-top:0;">Book a Visit</h3>
       <div id="visitSetupMsg"></div>
       <label style="font-weight:600; display:block; margin: 10px 0 6px;">Visit Date <span style="color: var(--danger);">*</span></label>
-      <input id="visitDate" type="date" class="input-field" min="" max="">
+      <input id="visitDate" type="date" class="input-field">
       <div style="display:flex; gap:10px; margin-top: 10px;">
         <div style="flex:1;">
           <label style="font-weight:600; display:block; margin: 10px 0 6px;">Check-in <span style="color: var(--danger);">*</span></label>
@@ -586,7 +578,6 @@
   <div id="loyalty" class="page" style="display:none;">
     <div class="loyalty-header-container">
       <h2 class="loyalty-title">Loyalty Card</h2>
-      <hr class="loyalty-underline">
     </div>
 
     <div class="loyalty-main-card">
@@ -656,7 +647,6 @@
   <div id="promos" class="page" style="display:none;">
     <div class="promo-header-container">
       <h2 class="promo-title">Promos & Announcements</h2>
-      <hr class="promo-underline">
     </div>
     <div id="promoList" class="promo-container-layout">
       <!-- Promos will be rendered here -->
@@ -713,6 +703,62 @@
 
   <div id="cartToast" class="cart-toast">Your order added to the cart</div>
 
+  <script>
+    // Set date restrictions for booking modals
+    document.addEventListener('DOMContentLoaded', function() {
+      const today = new Date();
+      const todayStr = today.toISOString().split('T')[0];
+      
+      // Get end of current year
+      const endOfYear = new Date(today.getFullYear(), 11, 31);
+      const endOfYearStr = endOfYear.toISOString().split('T')[0];
+      
+      const visitDateInput = document.getElementById('visitDate');
+      const preorderPickupDateInput = document.getElementById('preorderPickupDate');
+      
+      if (visitDateInput) {
+        visitDateInput.min = todayStr;
+        visitDateInput.max = endOfYearStr;
+      }
+      
+      if (preorderPickupDateInput) {
+        preorderPickupDateInput.min = todayStr;
+        preorderPickupDateInput.max = endOfYearStr;
+      }
+
+      // Initialize promos when showPage is called
+      const originalShowPage = window.showPage;
+      window.showPage = function(page) {
+        if (typeof originalShowPage === 'function') {
+          originalShowPage(page);
+        }
+        // Load promos when navigating to promos page
+        if (page === 'promos') {
+          setTimeout(() => {
+            if (typeof window.loadPromos === 'function') {
+              window.loadPromos();
+            }
+            if (typeof window.subscribeToPromosRealtime === 'function') {
+              window.subscribeToPromosRealtime();
+            }
+          }, 100);
+        }
+      };
+
+      // Also load promos immediately if promo list is visible
+      setTimeout(() => {
+        const promoList = document.getElementById('promoList');
+        if (promoList && typeof window.loadPromos === 'function') {
+          window.loadPromos();
+          if (typeof window.subscribeToPromosRealtime === 'function') {
+            window.subscribeToPromosRealtime();
+          }
+        }
+      }, 1000);
+    });
+  </script>
+
   <script src="./customer.js"></script>
 </body>
 </html>
+>
