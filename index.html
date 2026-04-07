@@ -32,10 +32,11 @@
 
     .navbar {
       display: flex;
-      justify-content: space-between;
+      flex-direction: row;
+      justify-content: flex-start;
       align-items: center;
       padding: 15px 5%;
-      background: rgba(84, 51, 16, 0.8);
+      background: rgba(84, 51, 16, 0.9);
       border-bottom: 1.5px solid rgba(255, 255, 255, 0.05);
       position: sticky;
       top: 0;
@@ -46,18 +47,28 @@
       -webkit-backdrop-filter: blur(10px);
     }
 
+    .nav-logo {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1001;
+    }
+
     .nav-logo img {
-      height: 60px;
+      height: 70px;
       width: auto;
       background: white;
       padding: 5px;
-      border-radius: 4px;
+      border-radius: 50%;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
 
     .nav-links {
       display: flex;
       gap: 30px;
       align-items: center;
+      margin-right: auto;
     }
 
     .nav-links a {
@@ -243,46 +254,61 @@
       z-index: 1;
     }
 
-    /* MENU VIEW */
     .menu-view {
       padding: 50px 8%;
-      background-color: var(--coffee-dark);
+      background-image: url('images/frappe_toricafe.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      position: relative;
       color: white;
       text-align: center;
-      position: relative;
+    }
+
+    .menu-view::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(84, 51, 16, 0.85); /* Overlay to make text readable */
+      z-index: 0;
     }
 
     .menu-header {
-      max-width: 700px;
+      max-width: 500px; /* Reduced width */
       margin: 0 auto 45px;
       position: relative;
       z-index: 1;
     }
 
     .search-box {
-      background: white;
-      border-radius: 12px;
-      padding: 15px 25px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 50px; /* More rounded */
+      padding: 10px 20px; /* Reduced padding */
       display: flex;
       align-items: center;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      border: 1.5px solid rgba(175, 143, 111, 0.3);
     }
 
     .search-box input {
       flex: 1;
       border: none;
       outline: none;
-      font-size: 18px;
-      margin-left: 15px;
+      font-size: 16px; /* Slightly smaller font */
+      margin-left: 12px;
       color: var(--coffee-dark);
+      background: transparent;
     }
 
-    .search-box i { color: #888; font-size: 20px; }
+    .search-box i { color: var(--accent-tan); font-size: 18px; }
 
     .cat-pills {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       justify-content: center;
       flex-wrap: wrap;
     }
@@ -291,12 +317,13 @@
       background: rgba(255,255,255,0.1);
       color: white;
       border: 1.5px solid rgba(255,255,255,0.2);
-      padding: 10px 22px;
+      padding: 8px 18px;
       border-radius: 30px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s;
-      font-size: 15px;
+      font-size: 14px;
+      backdrop-filter: blur(5px);
     }
 
     .cat-pill.active {
@@ -307,31 +334,50 @@
 
     .menu-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 35px;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
       position: relative;
       z-index: 1;
     }
 
     .menu-card {
-      background: white;
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 22px;
       overflow: hidden;
       color: var(--coffee-dark);
       text-align: left;
-      transition: transform 0.3s, box-shadow 0.3s;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
       display: flex;
       flex-direction: column;
       height: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
     }
 
     .menu-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.3);
+      background: white;
     }
 
-    .menu-card img { width: 100%; height: 230px; object-fit: cover; flex-shrink: 0; }
+    .menu-card-img-wrapper {
+      position: relative;
+      overflow: hidden;
+      height: 230px;
+      cursor: zoom-in;
+    }
+
+    .menu-card img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      transition: transform 0.5s ease;
+    }
+
+    .menu-card:hover img {
+      transform: scale(1.1);
+    }
 
     .menu-card-info { 
       padding: 22px; 
@@ -721,25 +767,26 @@
 <body>
 
   <nav class="navbar">
-    <div class="nav-logo" onclick="navigateTo('home')" style="cursor: pointer;">
-      <img src="images/tori.jpg" alt="Tori Logo">
-    </div>
-    
-    <!-- Mobile Menu Button -->
-    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-      <i class="fas fa-bars"></i>
-    </button>
-
-    <div class="nav-links" id="navLinks">
-      <button class="mobile-menu-close" onclick="toggleMobileMenu()">
-        <i class="fas fa-times"></i>
+      <div class="nav-links" id="navLinks">
+        <button class="mobile-menu-close" onclick="toggleMobileMenu()">
+          <i class="fas fa-times"></i>
+        </button>
+        <a href="javascript:void(0)" onclick="navigateTo('home')" id="nav-home" class="active">Home</a>
+        <a href="javascript:void(0)" onclick="navigateTo('menu')" id="nav-menu">Menu</a>
+        <a href="javascript:void(0)" onclick="navigateTo('wheel')" id="nav-wheel">Wheel</a>
+        <a href="javascript:void(0)" onclick="navigateTo('about')" id="nav-about">About</a>
+      </div>
+      
+      <div class="nav-logo" onclick="navigateTo('home')" style="cursor: pointer;">
+        <img src="images/tori.jpg" alt="Tori Logo">
+      </div>
+      
+      <!-- Mobile Menu Button -->
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
       </button>
-      <a href="javascript:void(0)" onclick="navigateTo('home')" id="nav-home" class="active">Home</a>
-      <a href="javascript:void(0)" onclick="navigateTo('menu')" id="nav-menu">Menu</a>
-      <a href="javascript:void(0)" onclick="navigateTo('wheel')" id="nav-wheel">Wheel</a>
-      <a href="javascript:void(0)" onclick="navigateTo('about')" id="nav-about">About</a>
-      <button onclick="openAuthModal()" class="btn-signin">Sign in</button>
-    </div>
+
+      <button onclick="openAuthModal()" class="btn-signin" style="margin-left: auto;">Sign in</button>
   </nav>
 
   <!-- HOME VIEW -->
@@ -856,15 +903,15 @@
           </div>
           <div class="contact-item-box">
             <i class="fab fa-facebook"></i>
-            <span>SassyShadeInspiredByAbiehs Choice</span>
+            <a href="https://www.facebook.com/SassyShadeInspiredByAbiehsChoice" target="_blank" style="text-decoration: none; color: inherit;">SassyShadeInspiredByAbiehs Choice</a>
           </div>
           <div class="contact-item-box">
             <i class="fas fa-envelope"></i>
-            <span>toricafeteriatc@gmail.com</span>
+            <a href="mailto:toricafeteriatc@gmail.com" style="text-decoration: none; color: inherit;">toricafeteriatc@gmail.com</a>
           </div>
           <div class="contact-item-box">
             <i class="fas fa-phone"></i>
-            <span>(+63) 956 590 8643</span>
+            <a href="tel:+639565908643" style="text-decoration: none; color: inherit;">(+63) 956 590 8643</a>
           </div>
         </div>
       </div>
@@ -989,8 +1036,11 @@
       Object.entries(grouped).forEach(([name, sizes]) => {
         const card = document.createElement('div');
         card.className = 'menu-card';
+        const imgUrl = sizes[0].image_url || 'images/tori.jpg';
         card.innerHTML = `
-          <img src="${sizes[0].image_url || 'images/tori.jpg'}" alt="${name}" onerror="this.src='images/tori.jpg'">
+          <div class="menu-card-img-wrapper" onclick="zoomImage('${imgUrl}', '${name.replace(/'/g, "\\'")}')">
+            <img src="${imgUrl}" alt="${name}" onerror="this.src='images/tori.jpg'">
+          </div>
           <div class="menu-card-info">
             <h3>${name}</h3>
             <div class="size-tags">
@@ -1004,6 +1054,36 @@
         `;
         grid.appendChild(card);
       });
+    }
+
+    // Zoom Image Feature
+    function zoomImage(src, name) {
+      const modal = document.createElement('div');
+      modal.className = 'zoom-modal';
+      modal.style = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.9); z-index: 3000;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        cursor: zoom-out; animation: fadeIn 0.3s ease;
+      `;
+      modal.onclick = () => modal.remove();
+      
+      const img = document.createElement('img');
+      img.src = src;
+      img.style = 'max-width: 90%; max-height: 80%; border-radius: 12px; box-shadow: 0 0 50px rgba(0,0,0,0.5); object-fit: contain;';
+      
+      const title = document.createElement('h3');
+      title.textContent = name;
+      title.style = 'color: white; margin-top: 20px; font-family: "Roboto Slab", serif; font-size: 24px;';
+      
+      const close = document.createElement('div');
+      close.innerHTML = '&times;';
+      close.style = 'position: absolute; top: 20px; right: 30px; color: white; font-size: 50px; font-weight: 300;';
+      
+      modal.appendChild(img);
+      modal.appendChild(title);
+      modal.appendChild(close);
+      document.body.appendChild(modal);
     }
 
     let wheelCtx, rotation = 0, isSpinning = false, wheelItems = [];

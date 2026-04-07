@@ -872,25 +872,30 @@ h3 {
 .sidebar-header {
   padding: 15px 20px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end; /* Already right-aligned */
   width: 100%;
 }
 
 .menu-close-btn {
-  background: transparent;
+  background: var(--accent-tan);
   border: none;
-  font-size: 28px;
+  font-size: 24px;
   cursor: pointer;
-  color: var(--tan-dark);
-  padding: 5px;
+  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-left: auto; /* Force it to the right */
 }
 
 .menu-close-btn:hover {
-  transform: rotate(90deg);
+  background: var(--tan-dark);
+  transform: rotate(90deg) scale(1.1);
 }
 
 .mobile-nav-overlay {
