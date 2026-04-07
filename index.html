@@ -188,7 +188,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(84, 51, 16, 0.9); /* Sightly transparent dark brown overlay */
+      background: rgba(84, 51, 16, 0.7); /* More transparent overlay to show bg image */
       z-index: 0;
     }
 
@@ -235,7 +235,7 @@
       letter-spacing: -1px;
       text-transform: uppercase;
       color: white;
-      text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      text-shadow: 0 4px 20px rgba(0,0,0,0.8); /* Increased shadow for visibility */
     }
 
     .hero-left p {
@@ -245,8 +245,8 @@
       line-height: 1.6;
       max-width: 550px;
       color: white;
-      font-weight: 500;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      font-weight: 600; /* Bolder */
+      text-shadow: 0 2px 15px rgba(0,0,0,0.8); /* Increased shadow */
     }
 
     .signup-bar {
@@ -844,8 +844,8 @@
       .hero-container { flex-direction: column; padding-top: 60px; text-align: center; }
       .hero-visual { order: -1; min-height: 35vh; width: 100%; }
       .hero-left { padding: 30px 20px; align-items: center; }
-      .hero-left h1 { font-size: clamp(28px, 10vw, 36px); margin-bottom: 15px; }
-      .hero-left p { font-size: 13px; margin-bottom: 25px; max-width: 100%; }
+      .hero-left h1 { font-size: clamp(28px, 10vw, 36px); margin-bottom: 15px; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+      .hero-left p { font-size: 14px; margin-bottom: 25px; max-width: 100%; font-weight: 700; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
       .signup-bar { flex-direction: column; gap: 12px; background: transparent; border: none; max-width: 280px; width: 100%; }
       .signup-bar input { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 50px; text-align: center; padding: 12px; width: 100%; }
       .signup-bar button { width: 100%; padding: 12px; border-radius: 50px; font-size: 16px; }
@@ -924,9 +924,8 @@
 
   <!-- HOME VIEW -->
   <div id="view-home" class="page-view active">
-    <div class="hero-container">
-      <div class="coffee-bean-design"></div>
-      <div class="hero-left">
+      <div class="hero-container">
+        <div class="hero-left">
         <h1>ICED. BOLD. PERFECT.</h1>
         <p>ENJOY THE PERFECT BLEND OF STRONG COFFEE AND ICE-COLD REFRESHMENT IN EVERY CUP.</p>
         <div class="signup-bar">
@@ -941,7 +940,6 @@
   <!-- MENU VIEW -->
   <div id="view-menu" class="page-view">
     <div class="menu-view">
-      <div class="coffee-bean-design"></div>
       <div class="menu-header">
         <div class="search-box">
           <i class="fas fa-search"></i>
@@ -965,7 +963,6 @@
   <!-- WHEEL VIEW -->
   <div id="view-wheel" class="page-view">
     <div class="wheel-view">
-      <div class="coffee-bean-design"></div>
       <h2 class="wheel-title">Spin the Wheel!</h2>
       <div class="wheel-layout">
         <div class="wheel-cats-panel">
@@ -1003,7 +1000,6 @@
   <!-- ABOUT VIEW - REDESIGNED 3-CARD LAYOUT -->
   <div id="view-about" class="page-view">
     <div class="about-view">
-      <div class="coffee-bean-design"></div>
       <!-- Top Card -->
       <div class="card-base about-top-card">
         <div style="flex: 1.2;">
