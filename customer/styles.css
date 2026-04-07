@@ -862,7 +862,7 @@ h3 {
   padding: 0;
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
   z-index: 2000;
-  transition: right 0.3s ease;
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar-nav.mobile-active {
@@ -870,32 +870,34 @@ h3 {
 }
 
 .sidebar-header {
-  padding: 15px 20px;
+  padding: 20px;
   display: flex;
-  justify-content: flex-end; /* Already right-aligned */
+  justify-content: flex-end;
   width: 100%;
+  background: #fcfcfc;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .menu-close-btn {
-  background: var(--accent-tan);
+  background: transparent;
   border: none;
-  font-size: 24px;
+  font-size: 26px;
   cursor: pointer;
-  color: white;
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
+  color: #999;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  margin-left: auto; /* Force it to the right */
+  transition: all 0.2s ease;
+  margin-left: auto;
 }
 
 .menu-close-btn:hover {
-  background: var(--tan-dark);
-  transform: rotate(90deg) scale(1.1);
+  background: #f0f0f0;
+  color: var(--tan-dark);
+  transform: rotate(90deg);
 }
 
 .mobile-nav-overlay {
@@ -3390,27 +3392,43 @@ h1 {
   .menu-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px !important;
+    padding: 10px !important;
+  }
+
+  .menu-item-card {
+    border-radius: 15px !important;
   }
 
   .menu-item-img {
-    height: 150px !important;
+    height: 140px !important;
   }
 
   .menu-item-info {
     padding: 12px !important;
-    gap: 8px !important;
+    gap: 6px !important;
   }
 
   .menu-item-info h3 {
-    font-size: 1rem !important;
+    font-size: 0.95rem !important;
+    margin-bottom: 4px !important;
   }
 
-  .size-price-btn {
+  .size-buttons-container {
+    gap: 4px !important;
+  }
+
+  .size-option-btn-new {
     padding: 6px 4px !important;
+    font-size: 10px !important;
   }
 
-  .size-price-btn div:last-child {
-    font-size: 0.85rem !important;
+  .menu-item-footer {
+    padding: 8px 12px !important;
+  }
+
+  .menu-item button {
+    padding: 8px !important;
+    font-size: 12px !important;
   }
 
   /* Compact Cards */
