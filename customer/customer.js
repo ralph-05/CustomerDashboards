@@ -5116,6 +5116,9 @@ window.spinTheWheel = () => {
   if (isSpinning || wheelItems.length === 0) return;
   isSpinning = true;
 
+  const tapHint = document.getElementById('customerTapHint');
+  if (tapHint) tapHint.style.opacity = '0';
+
   const spinBtn = document.getElementById("spinBtn");
   const addBtn = document.getElementById("addCartWheelBtn");
   const winnerBox = document.getElementById("winnerBox");
@@ -5149,6 +5152,8 @@ window.spinTheWheel = () => {
     if (p < 1) requestAnimationFrame(anim);
     else {
       isSpinning = false;
+      const tapHint = document.getElementById('customerTapHint');
+      if (tapHint) tapHint.style.opacity = '1';
       if (spinBtn) {
         spinBtn.disabled = false;
         spinBtn.textContent = "Spin Again";

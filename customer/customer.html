@@ -425,9 +425,10 @@
 
       <!-- CENTER SECTION -->
       <div class="wheel-center-section">
-        <div class="wheel-viz-container">
+        <div class="wheel-viz-container" onclick="spinTheWheel()">
           <div class="wheel-pointer-top"></div>
           <div class="wheel-fallback" aria-hidden="true"></div>
+          <div id="customerTapHint" class="tap-hint">Tap to Spin!</div>
           <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
         </div>
         <div id="winnerBox" class="wheel-result-box-new" aria-live="polite">
@@ -442,7 +443,6 @@
 
       <!-- RIGHT SECTION -->
       <div class="wheel-right-section">
-        <button id="spinBtn" class="spin-action-btn" onclick="spinTheWheel()">Spin</button>
         <button id="addCartWheelBtn" class="add-cart-action-btn" onclick="addWheelWinnerToCart()" style="display: none;">
           ADD CART <i class="fa-solid fa-cart-shopping"></i>
         </button>
@@ -574,13 +574,13 @@
   </div>
 
   <div id="loyalty" class="page" style="display:none;">
-    <div class="loyalty-header-mobile">Loyalty Card</div>
     <div class="loyalty-header-container">
       <h2 class="loyalty-title">Loyalty Card</h2>
       <hr class="loyalty-underline">
     </div>
 
     <div class="loyalty-main-card">
+      <div class="loyalty-header-mobile">Loyalty Card</div>
       <div class="loyalty-card-id-section">
         <span class="section-label">CARD ID</span>
         <div class="card-id-display-box">

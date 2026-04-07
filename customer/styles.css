@@ -547,9 +547,14 @@ body {
 @media (max-width: 1024px) {
   .loyalty-header-mobile {
     display: block;
+    font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: 800;
+    color: var(--white);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
   }
   
-  #loyalty .loyalty-title {
+  #loyalty .loyalty-header-container {
     display: none !important;
   }
 
@@ -559,6 +564,8 @@ body {
     background: white !important;
     backdrop-filter: none !important;
     border: none !important;
+    width: 95% !important;
+    max-width: none !important;
   }
 
   .loyalty-card-id-section {
@@ -567,28 +574,62 @@ body {
   }
 
   .card-id-display-box {
-    padding: 12px 15px !important;
+    padding: 10px 12px !important;
+    gap: 10px;
   }
 
   .card-id-display-box span {
-    font-size: 28px !important;
-    letter-spacing: 2px !important;
+    font-size: 24px !important;
+    letter-spacing: 1px !important;
+  }
+
+  .copy-id-btn {
+    padding: 8px 15px !important;
+    font-size: 14px !important;
   }
 
   .loyalty-stamps-section {
-    padding: 25px !important;
+    padding: 20px 15px !important;
     border-radius: 15px !important;
   }
 
+  .stamps-header h3 {
+    font-size: 18px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .stamps-header p {
+    font-size: 14px !important;
+    margin-bottom: 20px !important;
+  }
+
   .loyalty-stamp-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 10px !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 8px !important;
   }
 
   .loyalty-stamp-slot {
     aspect-ratio: 1 !important;
     height: auto !important;
-    font-size: 20px !important;
+    font-size: 24px !important;
+  }
+
+  .loyalty-stamp-slot .fa-gift {
+    font-size: 28px !important;
+  }
+
+  .redeem-btn {
+    padding: 15px 20px !important;
+    font-size: 18px !important;
+    border-radius: 12px !important;
+  }
+
+  .balance-label {
+    font-size: 18px !important;
+  }
+
+  .balance-amount {
+    font-size: 64px !important;
   }
 }
 
@@ -1911,13 +1952,13 @@ h1 {
 /* Temperature Buttons */
 .temp-buttons-container {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   margin: 5px 0;
 }
 
 .temp-icon-btn {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: 1.5px solid #eee;
   background: white;
@@ -1927,7 +1968,7 @@ h1 {
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .temp-icon-btn:hover {
@@ -1945,35 +1986,44 @@ h1 {
 /* Size and Price Buttons */
 .menu-item-sizes {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
   margin-top: auto;
+  width: 100%;
 }
 
 .size-price-btn {
-  padding: 10px 8px;
+  padding: 8px 4px;
   background: #f9f9f9;
   border: 1.5px solid #eee;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .size-price-btn div:first-child {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 600;
   color: #888;
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-align: center;
 }
 
 .size-price-btn div:last-child {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 800;
   color: var(--tan-dark);
+  white-space: nowrap;
 }
 
 .size-price-btn:hover:not(:disabled) {
@@ -2512,17 +2562,17 @@ h1 {
    justify-content: space-between; 
    align-items: center; 
    background: #74512D; 
-   padding: 25px 35px; 
+   padding: 15px 25px; 
    border-radius: 50px; 
    font-weight: 800; 
    color: #fff; 
-   font-size: 24px; 
+   font-size: 18px; 
    cursor: pointer; 
    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
    border: 2px solid rgba(255,255,255,0.1);
    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
  } 
- 
+
  .wheel-cat-item:hover {
    background: #AF8F6F;
    transform: scale(1.05) translateX(10px);
@@ -2538,11 +2588,11 @@ h1 {
  .wheel-cat-item input { 
    appearance: none;
    -webkit-appearance: none;
-   width: 32px; 
-   height: 32px; 
+   width: 24px; 
+   height: 24px; 
    cursor: pointer;
-   border: 3px solid white;
-   border-radius: 8px;
+   border: 2px solid white;
+   border-radius: 6px;
    background: transparent;
    position: relative;
    display: flex;
@@ -2561,7 +2611,7 @@ h1 {
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
   color: #543310;
-  font-size: 20px;
+  font-size: 14px;
 } 
 
 .wheel-cat-item input:disabled {
@@ -2577,6 +2627,31 @@ h1 {
   align-items: center; 
   gap: 30px;
 } 
+
+.tap-hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(84, 51, 16, 0.9);
+  color: white;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-size: 20px;
+  font-weight: 800;
+  pointer-events: none;
+  z-index: 20;
+  animation: pulseHint 1.5s infinite ease-in-out;
+  white-space: nowrap;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+  border: 2px solid #AF8F6F;
+  transition: opacity 0.3s;
+}
+
+@keyframes pulseHint {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+}
  
 .wheel-viz-container { 
   position: relative; 
@@ -2589,6 +2664,7 @@ h1 {
   justify-content: center; 
   align-items: center; 
   margin: 0 auto;
+  cursor: pointer;
 } 
 
 .wheel-fallback {
