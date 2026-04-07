@@ -840,12 +840,12 @@
       .nav-right-mobile-group {
         display: flex;
         align-items: center;
-        gap: 15px;
+        gap: 8px; /* Closer buttons */
       }
 
       .mobile-menu-btn { 
         display: block; 
-        background: none;
+        background: transparent !important;
         border: none;
         padding: 0;
         margin: 0;
@@ -865,6 +865,7 @@
         border-radius: 4px;
         font-size: 14px;
         font-weight: 600;
+        box-shadow: none !important;
         order: 1; /* Sign in to the left of burger */
       }
       
@@ -1091,7 +1092,7 @@
   <!-- WHEEL VIEW -->
   <div id="view-wheel" class="page-view">
     <div class="wheel-view">
-      <h2 class="wheel-title">Spin the Wheel!</h2>
+      <h2 class="wheel-title" id="wheelTitle">Spin the Wheel!</h2>
       <div class="wheel-layout">
         <div class="wheel-cats-panel">
           <div style="background: rgba(255,255,255,0.1); padding: 8px 20px; border-radius: 8px; font-weight: 800; margin-bottom: 25px; display: inline-block;">Category:</div>
@@ -1476,6 +1477,8 @@
       if (isSpinning || wheelItems.length === 0) return;
       isSpinning = true;
       document.getElementById('tapHint').style.opacity = '0';
+      const wheelTitle = document.getElementById('wheelTitle');
+      if (wheelTitle) wheelTitle.style.display = 'none';
       document.getElementById('winnerBox').classList.remove('visible');
       const spinAngle = 4000 + Math.random() * 3000;
       const duration = 5000, start = performance.now(), startRot = rotation;
@@ -1489,6 +1492,7 @@
         else {
           isSpinning = false;
           document.getElementById('tapHint').style.opacity = '1';
+          if (wheelTitle) wheelTitle.style.display = 'block';
           const slice = (Math.PI * 2) / wheelItems.length;
           const adj = (rotation + Math.PI / 2) % (Math.PI * 2);
           const idx = Math.floor((Math.PI * 2 - adj) / slice) % wheelItems.length;
