@@ -175,10 +175,7 @@
       min-height: calc(100vh - 80px);
       width: 100%;
       position: relative;
-      background-image: url('images/frappe_toricafe.jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
+      background: #543310 !important; /* Solid background instead of bean image */
     }
 
     .page-view::before {
@@ -188,7 +185,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(84, 51, 16, 0.85); /* Dark overlay */
+      background: none !important; /* Remove any bean pattern overlays */
       z-index: 0;
     }
 
@@ -211,6 +208,7 @@
       background: transparent;
     }
 
+    /* Remove coffee bean designs */
     .hero-left {
       flex: 1;
       display: flex;
@@ -219,28 +217,24 @@
       padding: 0 8%;
       position: relative;
       z-index: 1;
+      background: none !important;
     }
 
     .hero-left h1 {
-      font-family: 'Roboto Slab', serif;
-      font-size: clamp(45px, 8vw, 85px);
-      font-weight: 800;
+      font-size: clamp(40px, 8vw, 70px);
       line-height: 1.1;
-      margin: 0 0 30px 0;
+      margin-bottom: 20px;
+      font-weight: 900;
+      letter-spacing: -1px;
       text-transform: uppercase;
-      letter-spacing: 3px;
-      color: white;
-      display: block; /* Ensure it's visible */
     }
 
     .hero-left p {
-      font-size: clamp(16px, 1.5vw, 20px);
+      font-size: clamp(14px, 2vw, 18px);
+      margin-bottom: 35px;
+      opacity: 0.9;
+      line-height: 1.6;
       max-width: 500px;
-      margin-bottom: 40px;
-      line-height: 1.5;
-      color: rgba(255, 255, 255, 0.9);
-      font-weight: 500;
-      text-transform: uppercase;
     }
 
     .signup-bar {
@@ -283,6 +277,10 @@
       flex: 1;
       position: relative;
       z-index: 1;
+      background-image: url('images/frappe_toricafe.jpg');
+      background-size: cover;
+      background-position: center;
+      min-height: 500px;
     }
 
     .menu-view {
@@ -782,21 +780,25 @@
     /* Mobile Adjustments */
     @media (max-width: 768px) {
       .navbar { 
-        padding: 10px 15px; 
+        padding: 15px 20px; 
         justify-content: space-between; 
         background: var(--coffee-dark);
         position: fixed;
+        height: 70px;
       }
-      .nav-left-group { gap: 15px; }
-      .nav-logo img { height: 40px; }
+      .nav-left-content { gap: 0; }
+      .nav-logo img { height: 45px; width: 45px; }
       
       .mobile-menu-btn { 
         display: block; 
         background: none;
         border: none;
-        padding: 0; /* Remove padding */
+        padding: 5px;
         margin: 0;
-        box-shadow: none; /* Ensure no container look */
+        box-shadow: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
       }
       
       .nav-links { 
@@ -1164,9 +1166,11 @@
         const maxPrice = Math.max(...prices);
         const priceRange = prices.length > 1 ? `₱${minPrice} - ₱${maxPrice}` : `₱${minPrice}`;
         
-        // Check if Coffee for hot/cold
-        const catId = sizes[0].category_id;
-        const isCoffee = categories[catId] === 'Coffee';
+        // Force Hot/Cold for Coffee and certain Non-coffee items
+        const catName = categories[sizes[0].category_id];
+        const isCoffee = catName === 'Coffee';
+        const isNonCoffee = catName === 'Non-coffee';
+        const showTemp = isCoffee || isNonCoffee;
         
         card.innerHTML = `
           <div class="menu-card-img-wrapper" onclick="zoomImage('${imgUrl}', '${name.replace(/'/g, "\\'")}')">
@@ -1175,7 +1179,7 @@
           <div class="menu-card-info">
             <h3 style="margin:0; font-family: 'Roboto Slab', serif;">${name}</h3>
             
-            ${isCoffee ? `
+            ${showTemp ? `
               <div class="temp-options-hero">
                 <div class="temp-option" title="Cold" onclick="event.stopPropagation(); toggleTemp(this)">&#10052;</div>
                 <div class="temp-option active" title="Hot" onclick="event.stopPropagation(); toggleTemp(this)">&#9749;</div>
