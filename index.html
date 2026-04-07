@@ -1224,7 +1224,12 @@
       document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
       document.getElementById('nav-' + view).classList.add('active');
       if (view === 'menu') renderMenu();
-      if (view === 'wheel') initWheel();
+      if (view === 'wheel') {
+        initWheel();
+        // Automatically hide tap hint when navigating to wheel
+        const hint = document.getElementById('tapHint');
+        if (hint) hint.style.display = 'none';
+      }
       
       // Close mobile menu if open
       const navLinks = document.getElementById('navLinks');
@@ -1479,7 +1484,8 @@
     function spinTheWheel() {
       if (isSpinning || wheelItems.length === 0) return;
       isSpinning = true;
-      document.getElementById('tapHint').style.opacity = '0';
+      const hint = document.getElementById('tapHint');
+      if (hint) hint.style.display = 'none';
       const wheelTitle = document.getElementById('wheelTitle');
       if (wheelTitle) wheelTitle.style.display = 'none';
       document.getElementById('winnerBox').classList.remove('visible');
@@ -1494,7 +1500,6 @@
         if (p < 1) requestAnimationFrame(anim);
         else {
           isSpinning = false;
-          document.getElementById('tapHint').style.opacity = '1';
           if (wheelTitle) wheelTitle.style.display = 'block';
           const slice = (Math.PI * 2) / wheelItems.length;
           const adj = (rotation + Math.PI / 2) % (Math.PI * 2);
@@ -1506,9 +1511,16 @@
       requestAnimationFrame(anim);
     }
 
-    function openAuthModal() { 
+    function openAuthModal(mode) { 
       const modal = document.getElementById('heroAuthModal');
-      if (modal) modal.style.display = 'flex';
+      if (modal) {
+        modal.style.display = 'flex';
+        if (mode === 'signup') {
+          toggleHeroAuthMode('register');
+        } else {
+          toggleHeroAuthMode('login');
+        }
+      }
     }
 
     function closeHeroAuthModal() {
