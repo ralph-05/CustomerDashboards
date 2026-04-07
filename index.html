@@ -1155,19 +1155,51 @@
     function renderMenu() {
       const grid = document.getElementById('menuGrid');
       grid.innerHTML = '';
-      const filtered = allProducts.filter(p => {
+      
+      // Filter products based on category and search
+      let filtered = allProducts.filter(p => {
         const mCat = currentCat === 'All' || categories[p.category_id] === currentCat;
         const mSearch = p.name.toLowerCase().includes(searchVal);
         return mCat && mSearch;
       });
+
       if (filtered.length === 0) {
         grid.innerHTML = '<p style="grid-column: 1/-1; padding: 50px; font-size: 20px;">No items found matching your search.</p>';
         return;
       }
+
+      // If "All" tab is selected, sort by specific order: Coffee, Non-coffee, Frappe, Soda, Pastries
+      if (currentCat === 'All') {
+        const order = ['Coffee', 'Non-coffee', 'Frappe', 'Soda', 'Pastries'];
+        filtered.sort((a, b) => {
+          const catA = categories[a.category_id] || '';
+          const catB = categories[b.category_id] || '';
+          const indexA = order.indexOf(catA);
+          const indexB = order.indexOf(catB);
+          
+          // If category not in list, put it at the end
+          const finalIndexA = indexA === -1 ? 99 : indexA;
+          const finalIndexB = indexB === -1 ? 99 : indexB;
+          
+          if (finalIndexA !== finalIndexB) return finalIndexA - finalIndexB;
+          return a.name.localeCompare(b.name); // Secondary sort by name
+        });
+      }
+
       const grouped = {};
       filtered.forEach(p => { if(!grouped[p.name]) grouped[p.name] = []; grouped[p.name].push(p); });
       
-      Object.entries(grouped).forEach(([name, sizes]) => {
+      // Convert grouped object to array to maintain the sorted order
+      const groupedArray = [];
+      const seenNames = new Set();
+      filtered.forEach(p => {
+        if (!seenNames.has(p.name)) {
+          groupedArray.push([p.name, grouped[p.name]]);
+          seenNames.add(p.name);
+        }
+      });
+
+      groupedArray.forEach(([name, sizes]) => {
         const card = document.createElement('div');
         card.className = 'menu-card';
         const imgUrl = sizes[0].image_url || 'images/tori.jpg';
@@ -1176,7 +1208,6 @@
         const prices = sizes.map(s => Number(s.product_price));
         const minPrice = Math.min(...prices);
         const maxPrice = Math.max(...prices);
-        const priceRange = prices.length > 1 ? `₱${minPrice} - ₱${maxPrice}` : `₱${minPrice}`;
         
         // Force Hot/Cold ONLY for Coffee items
         const catName = categories[sizes[0].category_id];
