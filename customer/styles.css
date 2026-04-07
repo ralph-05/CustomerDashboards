@@ -929,15 +929,20 @@ h3 {
   font-size: 28px;
   cursor: pointer;
   color: #333;
-  width: auto;
-  height: auto;
-  padding: 5px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: transform 0.2s ease;
   margin-left: auto;
   box-shadow: none !important;
+  position: relative;
+  z-index: 2001;
+}
+
+.menu-close-btn:hover {
+  transform: rotate(90deg);
 }
 
 .menu-close-btn:hover {
@@ -2562,15 +2567,15 @@ h1 {
    justify-content: space-between; 
    align-items: center; 
    background: #74512D; 
-   padding: 15px 25px; 
+   padding: 10px 20px; 
    border-radius: 50px; 
    font-weight: 800; 
    color: #fff; 
-   font-size: 18px; 
+   font-size: 14px; 
    cursor: pointer; 
    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-   border: 2px solid rgba(255,255,255,0.1);
-   box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+   border: 1.5px solid rgba(255,255,255,0.1);
+   box-shadow: 0 5px 10px rgba(0,0,0,0.15);
  } 
 
  .wheel-cat-item:hover {
@@ -2586,19 +2591,19 @@ h1 {
  }
 
  .wheel-cat-item input { 
-   appearance: none;
-   -webkit-appearance: none;
-   width: 24px; 
-   height: 24px; 
-   cursor: pointer;
-   border: 2px solid white;
-   border-radius: 6px;
-   background: transparent;
-   position: relative;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   transition: all 0.2s;
+   appearance: none; 
+   -webkit-appearance: none; 
+   width: 20px; 
+   height: 20px; 
+   cursor: pointer; 
+   border: 1.5px solid white; 
+   border-radius: 4px; 
+   background: transparent; 
+   position: relative; 
+   display: flex; 
+   align-items: center; 
+   justify-content: center; 
+   transition: all 0.2s; 
  } 
 
  .wheel-cat-item input:checked {
@@ -2611,7 +2616,7 @@ h1 {
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
   color: #543310;
-  font-size: 14px;
+  font-size: 12px;
 } 
 
 .wheel-cat-item input:disabled {

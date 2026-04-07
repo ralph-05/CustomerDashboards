@@ -2390,15 +2390,15 @@ function submitBooking() {
     return
   }
 
-  // Pre-orders can be same day, but visits must be tomorrow
-  if (!isPreorder && selectedDate <= today) {
-    showMessage("Bookings must be made at least 1 day in advance.", "error", msgContainer)
+  // Restrict to current year only per user request
+  if (selectedDate.getFullYear() !== today.getFullYear()) {
+    showMessage(`Please select a date within the current year (${today.getFullYear()}).`, "error", msgContainer)
     return
   }
 
-  // Validate booking year (max 1 year in advance)
-  if (selectedDate.getFullYear() > today.getFullYear() + 1) {
-    showMessage("Please select a date within 1 year from today.", "error", msgContainer)
+  // Pre-orders can be same day, but visits must be tomorrow
+  if (!isPreorder && selectedDate <= today) {
+    showMessage("Bookings must be made at least 1 day in advance.", "error", msgContainer)
     return
   }
 
@@ -4708,9 +4708,13 @@ const resizeWheelCanvas = () => {
   const canvas = document.getElementById("wheelCanvas");
   if (!canvas) return;
   const container = canvas.parentElement;
-  const width = container?.clientWidth || canvas.clientWidth;
-  const height = container?.clientHeight || width;
-  const size = Math.max(240, Math.floor(Math.min(width, height || width)));
+  
+  // Maximize wheel size for mobile: 90vw if screen is small
+  const isMobile = window.innerWidth <= 768;
+  const maxWidth = isMobile ? window.innerWidth * 0.92 : (container?.clientWidth || canvas.clientWidth);
+  const maxHeight = isMobile ? window.innerHeight * 0.6 : (container?.clientHeight || maxWidth);
+  
+  const size = Math.max(240, Math.floor(Math.min(maxWidth, maxHeight)));
   if (!size) return;
 
   const dpr = window.devicePixelRatio || 1;
@@ -5117,7 +5121,10 @@ window.spinTheWheel = () => {
   isSpinning = true;
 
   const tapHint = document.getElementById('customerTapHint');
-  if (tapHint) tapHint.style.opacity = '0';
+  if (tapHint) {
+    tapHint.style.opacity = '0';
+    tapHint.style.display = 'none'; // Hide completely so it doesn't reappear until reset
+  }
 
   const spinBtn = document.getElementById("spinBtn");
   const addBtn = document.getElementById("addCartWheelBtn");
@@ -5152,8 +5159,8 @@ window.spinTheWheel = () => {
     if (p < 1) requestAnimationFrame(anim);
     else {
       isSpinning = false;
-      const tapHint = document.getElementById('customerTapHint');
-      if (tapHint) tapHint.style.opacity = '1';
+      // Do not automatically show tapHint here per user request
+      
       if (spinBtn) {
         spinBtn.disabled = false;
         spinBtn.textContent = "Spin Again";
@@ -5176,10 +5183,24 @@ window.spinTheWheel = () => {
 
       setWheelStatus(winnerName, metaParts.join(" \u2022 "), true);
 
-      if (addBtn) addBtn.style.display = "flex";
+      if (addBtn) {
+        addBtn.style.display = "flex";
+        // Show tapHint again only if they want to spin again (optional, keeping it hidden for now)
+      }
     }
   }
   requestAnimationFrame(anim);
+};
+
+// Reset tap hint when categories change
+const originalUpdateWheel = window.updateWheel;
+window.updateWheel = () => {
+  if (typeof originalUpdateWheel === 'function') originalUpdateWheel();
+  const tapHint = document.getElementById('customerTapHint');
+  if (tapHint && !isSpinning) {
+    tapHint.style.display = 'block';
+    tapHint.style.opacity = '1';
+  }
 };
 
 window.addWheelWinnerToCart = () => {

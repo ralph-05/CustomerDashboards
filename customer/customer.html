@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Customer Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -439,13 +439,17 @@
           </div>
           <span class="wheel-spark">✨</span>
         </div>
+        
+        <!-- Move Add Cart Button Bellow Winner Box -->
+        <div class="wheel-action-footer" style="margin-top: 20px; width: 100%; display: flex; justify-content: center;">
+          <button id="addCartWheelBtn" class="add-cart-action-btn" onclick="addWheelWinnerToCart()" style="display: none; padding: 15px 40px; font-size: 18px; border-radius: 12px;">
+            ADD CART <i class="fa-solid fa-cart-shopping"></i>
+          </button>
+        </div>
       </div>
 
       <!-- RIGHT SECTION -->
-      <div class="wheel-right-section">
-        <button id="addCartWheelBtn" class="add-cart-action-btn" onclick="addWheelWinnerToCart()" style="display: none;">
-          ADD CART <i class="fa-solid fa-cart-shopping"></i>
-        </button>
+      <div class="wheel-right-section" style="display: none;">
       </div>
     </div>
   </div>
