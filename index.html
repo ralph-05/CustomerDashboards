@@ -928,23 +928,28 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: rgba(84, 51, 16, 0.9);
+        background: rgba(84, 51, 16, 0.95);
         color: white;
-        padding: 15px 30px;
+        padding: 15px 35px;
         border-radius: 50px;
-        font-size: 20px;
+        font-size: 22px;
         font-weight: 800;
         pointer-events: none;
         z-index: 20;
-        animation: pulseHint 1.5s infinite ease-in-out;
+        animation: pulseHint 2s infinite ease-in-out;
         white-space: nowrap;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        box-shadow: 0 5px 25px rgba(0,0,0,0.5);
         border: 2px solid var(--accent-tan);
+        transition: opacity 0.4s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        opacity: 0;
+        display: none;
       }
 
       @keyframes pulseHint {
-        0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-        50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+        0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+        50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
       }
 
       .wheel-canvas-wrapper { cursor: pointer; }
@@ -1181,7 +1186,7 @@
   <div id="heroAuthModal" class="auth-modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center;">
     <div class="auth-modal-content" style="background: white; padding: 40px; border-radius: 20px; max-width: 450px; width: 90%; position: relative; color: var(--coffee-dark);">
       <button onclick="closeHeroAuthModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #888;">&times;</button>
-      <h3 style="text-align: center; font-family: 'Roboto Slab', serif; margin-bottom: 25px; font-size: 24px;">Log In or Create Account</h3>
+      <h3 style="text-align: center; font-family: 'Roboto Slab', serif; margin-bottom: 25px; font-size: 24px;">Sign up</h3>
       <div id="heroAuthMessage" style="margin-bottom: 15px; text-align: center; font-weight: 600; font-size: 14px;"></div>
       
       <div id="heroAuthInputs">
@@ -1226,9 +1231,12 @@
       if (view === 'menu') renderMenu();
       if (view === 'wheel') {
         initWheel();
-        // Automatically hide tap hint when navigating to wheel
+        // Show tap hint when navigating to wheel
         const hint = document.getElementById('tapHint');
-        if (hint) hint.style.display = 'none';
+        if (hint) {
+          hint.style.display = 'block';
+          setTimeout(() => { hint.style.opacity = '1'; }, 10);
+        }
       }
       
       // Close mobile menu if open
@@ -1485,7 +1493,10 @@
       if (isSpinning || wheelItems.length === 0) return;
       isSpinning = true;
       const hint = document.getElementById('tapHint');
-      if (hint) hint.style.display = 'none';
+      if (hint) {
+        hint.style.opacity = '0';
+        setTimeout(() => { hint.style.display = 'none'; }, 400);
+      }
       const wheelTitle = document.getElementById('wheelTitle');
       if (wheelTitle) wheelTitle.style.display = 'none';
       document.getElementById('winnerBox').classList.remove('visible');
