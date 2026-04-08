@@ -2129,14 +2129,41 @@ h1 {
 .page {
   flex: 1;
   margin-left: 0;
-  padding: 40px 40px 150px; /* Added large bottom padding */
-  padding-top: 110px; /* Space for fixed header (70px) + some extra margin */
+  padding: 50px 60px 150px;
+  padding-top: 100px;
   width: 100%;
   min-height: 100vh;
   box-sizing: border-box;
   background: transparent;
   display: none;
   overflow-y: auto;
+}
+
+@media (max-width: 1440px) {
+  .page {
+    padding: 45px 50px 150px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .page {
+    padding: 40px 40px 150px;
+    padding-top: 90px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 30px 25px 150px;
+    padding-top: 85px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 20px 18px 150px;
+    padding-top: 80px;
+  }
 }
 
 .page h2 {
@@ -2146,7 +2173,7 @@ h1 {
   margin-bottom: 24px;
   font-size: 28px;
   font-weight: 700;
-  border-bottom: 3px solid var(--accent-warm);
+  border-bottom: none;
   padding-bottom: 12px;
   display: block;
   white-space: nowrap;
@@ -2219,20 +2246,35 @@ h1 {
 
 .category-header {
   grid-column: 1 / -1;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 800;
   color: var(--white);
-  margin: 40px 0 20px 0;
-  padding-bottom: 10px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  margin: 50px 0 25px 0;
+  padding-bottom: 0;
+  border-bottom: none;
   display: flex;
   align-items: center;
   gap: 12px;
   font-family: var(--font-slab);
+  letter-spacing: 0.5px;
 }
 
 .category-header span {
   font-size: 1.8rem;
+}
+
+@media (max-width: 1024px) {
+  .category-header {
+    font-size: 1.2rem;
+    margin: 35px 0 20px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-header {
+    font-size: 1.1rem;
+    margin: 25px 0 15px 0;
+  }
 }
 
 /* Floating Actions Mobile Fix */
@@ -2278,27 +2320,54 @@ h1 {
 }
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 25px;
   margin-bottom: 40px;
   width: 100%;
 }
 
+/* Responsive grid for tablets and mobile */
+@media (max-width: 1440px) {
+  .menu-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .menu-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-grid {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 15px;
+  }
+}
+
 .menu-item-card {
   background: white;
-  border-radius: 20px;
+  border-radius: 16px;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
   height: 100%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  border: 1px solid #eee;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
 }
 
 .menu-item-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
   border-color: var(--accent-warm);
 }
 
@@ -4562,4 +4631,352 @@ h1 {
 .promo-date, .promo-expiry {
   font-size: 0.85rem;
   color: #888;
+}
+
+/* ============================================ */
+/* PAGE HEADER STYLING - NO UNDERLINES */
+/* ============================================ */
+
+.header-underline {
+  display: none !important;
+}
+
+/* Page Containers - Consistent Header Styling */
+.wheel-header-container,
+.loyalty-header-container,
+.track-header-container,
+.promo-header-container,
+.book-header-container {
+  margin-bottom: 25px;
+  padding-bottom: 0;
+}
+
+.wheel-title,
+.loyalty-title,
+.track-title,
+.promo-title,
+.book-title {
+  color: #FFFFFF;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0;
+  margin-bottom: 0;
+  letter-spacing: 0.5px;
+  font-family: var(--font-slab);
+}
+
+/* ============================================ */
+/* LOYALTY CARD RESPONSIVE LAYOUT FIX */
+/* ============================================ */
+
+.loyalty-main-card {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.loyalty-header-mobile {
+  display: none;
+  padding: 20px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--coffee-dark);
+  border-bottom: 1px solid #eee;
+}
+
+.loyalty-card-id-section,
+.loyalty-stamps-section,
+.loyalty-actions,
+.loyalty-balance-section {
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.loyalty-balance-section {
+  border-bottom: none;
+  text-align: center;
+  padding: 25px 20px;
+}
+
+@media (max-width: 768px) {
+  .loyalty-header-mobile {
+    display: block;
+  }
+  
+  .loyalty-main-card {
+    max-width: 95vw;
+    margin: 15px auto;
+  }
+  
+  .loyalty-card-id-section,
+  .loyalty-stamps-section,
+  .loyalty-actions,
+  .loyalty-balance-section {
+    padding: 18px;
+  }
+}
+
+/* ============================================ */
+/* SPIN THE WHEEL - RESPONSIVE SIZE FIX */
+/* ============================================ */
+
+.wheel-dashboard-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+}
+
+.wheel-left-section {
+  flex: 0 1 auto;
+  min-width: 200px;
+  max-width: 300px;
+}
+
+.wheel-center-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 300px;
+}
+
+.wheel-viz-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 1;
+  margin-bottom: 20px;
+}
+
+#wheelCanvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 600px;
+  max-height: 600px;
+}
+
+@media (max-width: 1024px) {
+  .wheel-viz-container {
+    max-width: 450px;
+  }
+  
+  #wheelCanvas {
+    max-width: 450px;
+    max-height: 450px;
+  }
+}
+
+@media (max-width: 768px) {
+  .wheel-dashboard-layout {
+    flex-direction: column;
+    padding: 15px;
+    gap: 15px;
+  }
+  
+  .wheel-left-section {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .wheel-center-section {
+    width: 100%;
+  }
+  
+  .wheel-viz-container {
+    max-width: 100%;
+    aspect-ratio: 1;
+  }
+  
+  #wheelCanvas {
+    max-width: 100%;
+    max-height: 400px;
+  }
+}
+
+/* ============================================ */
+/* TRACKING DASHBOARD - SINGLE UNDERLINE */
+/* ============================================ */
+
+.track-section {
+  margin-bottom: 30px;
+}
+
+.track-section h3 {
+  color: var(--coffee-dark);
+  font-size: 1.2rem;
+  margin: 35px 0 20px 0;
+  font-weight: 700;
+  border-bottom: none;
+  padding-bottom: 0;
+  font-family: var(--font-slab);
+  letter-spacing: 0.3px;
+}
+
+/* Remove old track-underline HR */
+.track-underline {
+  display: none !important;
+}
+
+/* ============================================ */
+/* PAGE CONTAINER IMPROVEMENTS */
+/* ============================================ */
+
+.page {
+  width: 100%;
+  max-width: 100%;
+  padding: 40px 40px;
+  min-height: calc(100vh - 140px);
+  overflow-y: auto;
+}
+
+@media (max-width: 1024px) {
+  .page {
+    padding: 30px 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 20px 15px;
+  }
+  
+  .wheel-title,
+  .loyalty-title,
+  .track-title,
+  .promo-title,
+  .book-title {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 15px 12px;
+  }
+  
+  .wheel-title,
+  .loyalty-title,
+  .track-title,
+  .promo-title,
+  .book-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* ============================================ */
+/* OVERALL UI/UX IMPROVEMENTS */
+/* ============================================ */
+
+/* Improve menu item styling */
+.menu-item-info {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+}
+
+/* Category filter improvements */
+.category-filter {
+  margin-bottom: 35px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 14px;
+  border-radius: 12px;
+}
+
+/* Improve spacing for sections */
+.track-section {
+  margin-bottom: 40px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Improve loyalty card styling */
+.loyalty-main-card {
+  margin-top: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Better spacing for tabs and filters */
+.category-filter button {
+  padding: 12px 28px;
+  font-size: 14px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+/* Improve text contrast */
+.track-section td {
+  padding: 14px 12px;
+}
+
+.track-section th {
+  padding: 16px 12px;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Better menu grid spacing on all screen sizes */
+@media (max-width: 1440px) {
+  .menu-item-card {
+    border-radius: 14px;
+  }
+  
+  .menu-item-info {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .menu-item-card {
+    border-radius: 12px;
+  }
+  
+  .menu-item-info {
+    padding: 16px;
+    gap: 10px;
+  }
+  
+  .track-section {
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-item-card {
+    border-radius: 12px;
+  }
+  
+  .menu-item-info {
+    padding: 14px;
+    gap: 8px;
+  }
+  
+  .menu-item-info h3 {
+    font-size: 1rem;
+  }
+  
+  .track-section {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .track-section h3 {
+    font-size: 1.1rem;
+    margin: 20px 0 15px 0;
+  }
 }
