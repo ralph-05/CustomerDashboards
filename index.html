@@ -1195,9 +1195,30 @@
       .wheel-view { display: flex; flex-direction: column; align-items: center; padding: 100px 20px 40px; }
       .wheel-title { font-size: 28px; margin-bottom: 30px; text-align: center; position: relative; z-index: 10; }
       .wheel-layout { grid-template-columns: 1fr; width: 100%; gap: 20px; margin-top: 0; }
-      .wheel-cats-panel { padding: 15px; order: 2; width: 100%; }
-      .wheel-cats-panel > div:first-child { font-size: 16px; padding: 6px 15px !important; margin-bottom: 15px !important; }
-      .wheel-cat-option { padding: 10px 15px; font-size: 14px; margin-bottom: 8px; }
+      .wheel-cats-panel { 
+        padding: 20px 15px; 
+        order: 2; 
+        width: 100%; 
+        display: block !important;
+        grid-template-columns: none !important;
+      }
+      .wheel-cats-panel::before { 
+        display: block !important;
+        font-size: 16px; 
+        margin-bottom: 15px !important;
+        padding-bottom: 12px !important;
+        border-bottom: 2px solid rgba(255,255,255,0.2) !important;
+        width: 100%;
+      }
+      .wheel-cat-option { 
+        padding: 12px 15px; 
+        font-size: 14px; 
+        margin-bottom: 10px; 
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
       .wheel-cat-option input { width: 18px; height: 18px; }
       .wheel-visual-panel { order: 1; width: 100%; }
       .wheel-column-action { display: none; } /* Hide the spin button section */
