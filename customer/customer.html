@@ -81,6 +81,38 @@
 
   <div class="mobile-nav-overlay" onclick="toggleMobileNav()"></div>
 
+  <!-- Item Details Modal -->
+  <div id="itemModal" class="item-modal" onclick="if(event.target === this) closeItemModal()">
+    <div class="item-modal-content">
+      <div class="item-modal-close" onclick="closeItemModal()">&times;</div>
+      <div id="modalImg" class="item-modal-img"></div>
+      <div class="item-modal-info">
+        <h2 id="modalTitle" class="item-modal-title">Item Name</h2>
+        <p id="modalDesc" class="item-modal-desc">Item description goes here.</p>
+        
+        <div id="modalTempSection">
+          <div class="modal-section-title">Temperature</div>
+          <div class="modal-temp-options">
+            <button id="tempCold" class="modal-temp-btn" onclick="setModalTemp('Cold')">
+              <i class="fas fa-snowflake"></i> Cold
+            </button>
+            <button id="tempHot" class="modal-temp-btn active" onclick="setModalTemp('Hot')">
+              <i class="fas fa-mug-hot"></i> Hot
+            </button>
+          </div>
+        </div>
+        
+        <div class="modal-section-title">Select Size</div>
+        <div id="modalSizeGrid" class="modal-size-grid"></div>
+        
+        <button class="modal-add-btn" onclick="handleModalAdd()">
+          <i class="fas fa-cart-plus"></i>
+          <span>Add to Cart</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Pre-order Cart Drawer -->
   <button id="preorderDrawerBtn" class="order-drawer-btn preorder-btn" onclick="togglePreorderDrawer()" title="Pre-order Cart" style="display:none; background-color: var(--preorder-accent);">
     <span class="cart-icon">🛒</span>
@@ -120,7 +152,6 @@
       <div class="cart-actions">
         <button class="btn-checkout" onclick="openPreorderModal()" style="background: var(--preorder-accent);">
           <span>Confirm Pre-order</span>
-          <span class="checkout-arrow">→</span>
         </button>
       </div>
     </div>
@@ -168,7 +199,6 @@
       <div class="cart-actions">
         <button id="checkoutNowBtn" class="btn-checkout" onclick="openPaymentModal()">
           <span>Checkout Now</span>
-          <span class="checkout-arrow">→</span>
         </button>
       </div>
     </div>
@@ -457,14 +487,14 @@
   <div id="menu" class="page" style="display:none;">
     <div class="menu-top-section">
       <div class="category-selector-container">
-        <select id="categorySelect" class="category-dropdown-select" onchange="window.selectCategory(this.value, this)">
-          <option value="All">All Items</option>
-          <option value="Coffee">Coffee</option>
-          <option value="Non-coffee">Non-coffee</option>
-          <option value="Frappe">Frappe</option>
-          <option value="Soda">Soda</option>
-          <option value="Pastries">Pastries</option>
-        </select>
+        <div class="cat-pills">
+          <button class="cat-pill active" onclick="window.selectCategory('All', this)">All Items</button>
+          <button class="cat-pill" onclick="window.selectCategory('Coffee', this)">Coffee</button>
+          <button class="cat-pill" onclick="window.selectCategory('Non-coffee', this)">Non-coffee</button>
+          <button class="cat-pill" onclick="window.selectCategory('Frappe', this)">Frappe</button>
+          <button class="cat-pill" onclick="window.selectCategory('Soda', this)">Soda</button>
+          <button class="cat-pill" onclick="window.selectCategory('Pastries', this)">Pastries</button>
+        </div>
       </div>
 
       <div class="search-bar-container">

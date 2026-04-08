@@ -34,22 +34,32 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 5%;
-      background: rgba(84, 51, 16, 0.9);
-      border-bottom: 1.5px solid rgba(255, 255, 255, 0.05);
+      padding: 0 5%;
+      height: 80px;
+      background: rgba(84, 51, 16, 0.95);
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
       position: sticky;
       top: 0;
       width: 100%;
       z-index: 1000;
       box-sizing: border-box;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .nav-left-content {
       display: flex;
       align-items: center;
-      gap: 30px;
+      gap: 40px;
     }
 
     .nav-logo {
@@ -212,22 +222,24 @@
     .hero-container {
       display: flex;
       min-height: calc(100vh - 80px);
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
       position: relative;
       overflow: hidden;
-      background: none !important; /* Home page specific clear bg to show frappe right img */
+      background: none !important;
     }
 
     .hero-container::before {
-      display: none !important; /* Remove overlay for home page specifically */
+      display: none !important;
     }
 
-    /* Remove coffee bean designs */
     .hero-left {
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 0 8%;
+      padding: 60px 5%;
       position: relative;
       z-index: 2;
       background: none !important;
@@ -321,7 +333,7 @@
     /* .menu-view::before removed - using global page-view::before */
 
     .menu-header {
-      max-width: 700px;
+      max-width: 900px; /* Increased to prevent clipping */
       margin: 0 auto 50px;
       position: relative;
       z-index: 1;
@@ -357,28 +369,52 @@
 
     .cat-pills {
       display: flex;
-      gap: 14px;
+      gap: 12px;
       justify-content: center;
-      flex-wrap: wrap;
+      flex-wrap: wrap; /* Allow wrapping to prevent cut-off */
+      padding: 10px 0;
+      width: 100%;
+      max-width: 1000px; /* Increased max-width for pills specifically */
+      margin: 0 auto;
     }
 
     .cat-pill {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.15);
       color: white;
-      border: 1.5px solid rgba(255,255,255,0.2);
-      padding: 12px 26px;
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      padding: 10px 24px;
       border-radius: 30px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
-      transition: all 0.3s;
-      font-size: 16px;
-      backdrop-filter: blur(5px);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-size: 1rem;
+      backdrop-filter: blur(8px);
+      white-space: nowrap;
+      flex: 0 1 auto; /* Allow shrinking if needed */
+    }
+
+    .cat-pill:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      border-color: white;
     }
 
     .cat-pill.active {
       background: var(--accent-tan);
       border-color: var(--accent-tan);
-      box-shadow: 0 6px 16px rgba(175, 143, 111, 0.5);
+      box-shadow: 0 6px 20px rgba(175, 143, 111, 0.5);
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .cat-pills {
+        flex-wrap: wrap; /* Allow wrapping on mobile */
+        justify-content: center;
+      }
+      .cat-pill {
+        padding: 8px 18px;
+        font-size: 0.9rem;
+      }
     }
 
     .menu-grid {
@@ -394,26 +430,24 @@
 
     .menu-card {
       background: #F8F4E1;
-      border-radius: 16px;
+      border-radius: 20px;
       overflow: hidden;
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
       cursor: pointer;
       position: relative;
-      height: 100%;
     }
 
     .menu-card:hover {
       transform: translateY(-12px) scale(1.02);
       box-shadow: 0 20px 45px rgba(0,0,0,0.3);
-      background: white;
     }
 
     .menu-card-img-wrapper {
       position: relative;
       overflow: hidden;
-      height: 280px;
-      cursor: zoom-in;
+      aspect-ratio: 1/1;
+      width: 100%;
     }
 
     .menu-card img { 
@@ -427,127 +461,219 @@
       transform: scale(1.1);
     }
 
-    .menu-card-info {
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Temperature Options */
-    .temp-options-hero {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 5px;
-    }
-
-    .temp-option {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: 1.5px solid #eee;
+    .menu-card-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-      background: white;
-      color: #888;
+      opacity: 0;
+      transition: opacity 0.3s;
     }
 
-    .temp-option.active {
-      background: var(--accent-tan);
+    .menu-card:hover .menu-card-overlay {
+      opacity: 1;
+    }
+
+    .view-details {
       color: white;
-      border-color: var(--accent-tan);
+      font-weight: 700;
+      font-size: 1.2rem;
+      border: 2px solid white;
+      padding: 10px 20px;
+      border-radius: 30px;
+      background: rgba(0,0,0,0.2);
     }
 
-    /* Size Price Buttons */
-    .size-price-grid-hero {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: auto;
+    /* Modal for Item Details */
+    .item-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      z-index: 4000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      backdrop-filter: blur(8px);
     }
 
-    .size-price-btn-hero {
-      padding: 12px 8px;
-      background: #f9f9f9;
-      border: 1.5px solid #eee;
-      border-radius: 10px;
+    .item-modal-content {
+      background: #F8F4E1;
+      border-radius: 30px;
+      width: 95%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+      position: relative;
+      animation: modalScaleUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes modalScaleUp {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .item-modal-img {
+      flex: 1.2;
+      height: auto;
+      min-height: 400px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .item-modal-info {
+      flex: 1;
+      padding: 40px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .size-price-btn-hero.active {
-      background: var(--accent-tan);
-      border-color: var(--accent-tan);
-      box-shadow: 0 2px 8px rgba(175, 143, 111, 0.2);
-    }
-
-    .size-price-btn-hero.active .size-label,
-    .size-price-btn-hero.active .price-label {
-      color: white !important;
-    }
-
-    .size-price-btn-hero .size-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: #999;
-      text-transform: uppercase;
-    }
-
-    .size-price-btn-hero .price-label {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--accent-brown);
-    }
-
-    .menu-card-info h3 {
-      font-family: 'Roboto Slab', serif;
-      font-size: 28px;
-      margin: 0 0 16px 0;
       color: var(--coffee-dark);
-      font-weight: 700;
+      overflow-y: auto;
+      max-height: 90vh;
     }
 
-    .size-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
-    .size-tag {
-      background: var(--bg-cream);
-      padding: 5px 10px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--accent-brown);
-    }
-
-    .menu-card-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1.5px solid #f0f0f0;
-      padding-top: 18px;
-      margin-top: auto; /* Push to bottom of card */
-    }
-
-    .card-price { font-weight: 800; font-size: 20px; color: var(--accent-brown); }
-
-    .btn-order-now {
-      background: var(--coffee-dark);
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 14px;
+    .item-modal-close {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      font-size: 30px;
+      color: var(--coffee-dark);
       cursor: pointer;
+      z-index: 10;
+      background: rgba(255,255,255,0.8);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: all 0.3s;
     }
 
-    .btn-order-now:hover { background: var(--accent-tan); }
+    .item-modal-close:hover {
+      background: white;
+      transform: rotate(90deg);
+    }
+
+    .item-modal-title {
+      font-family: 'Roboto Slab', serif;
+      font-size: 36px;
+      margin: 0 0 15px 0;
+      font-weight: 800;
+    }
+
+    .item-modal-desc {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      color: #555;
+    }
+
+    .modal-section-title {
+      font-weight: 800;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+      color: var(--accent-brown);
+    }
+
+    .modal-temp-options {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .modal-temp-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 15px;
+      border: 2px solid #ddd;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-weight: 700;
+      transition: all 0.3s;
+    }
+
+    .modal-temp-btn.active {
+      border-color: var(--accent-tan);
+      background: var(--accent-tan);
+      color: white;
+      box-shadow: 0 5px 15px rgba(175, 143, 111, 0.3);
+    }
+
+    .modal-size-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 15px;
+      margin-bottom: 35px;
+    }
+
+    .modal-size-btn {
+      padding: 15px;
+      border-radius: 15px;
+      border: 2px solid #ddd;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.3s;
+    }
+
+    .modal-size-btn.active {
+      border-color: var(--accent-tan);
+      background: #FFF9F0;
+      box-shadow: 0 5px 15px rgba(175, 143, 111, 0.15);
+    }
+
+    .modal-size-btn .size-name { font-weight: 800; font-size: 1.1rem; }
+    .modal-size-btn .size-price { font-weight: 600; color: var(--accent-brown); }
+
+    .modal-order-btn {
+      margin-top: auto;
+      padding: 18px;
+      border-radius: 50px;
+      border: none;
+      background: var(--coffee-dark);
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .modal-order-btn:hover {
+      background: var(--accent-tan);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(175, 143, 111, 0.4);
+    }
+
+    @media (max-width: 850px) {
+      .item-modal-content { flex-direction: column; width: 90%; max-height: 90vh; }
+      .item-modal-img { min-height: 250px; flex: none; }
+      .item-modal-info { padding: 25px; }
+      .item-modal-title { font-size: 28px; }
+    }
 
     /* WHEEL VIEW */
     .wheel-view {
@@ -1184,9 +1310,23 @@
       .nav-links a { font-size: 20px; width: 100%; text-align: center; padding: 15px 0; border: none; font-weight: 600; color: white !important; }
       .btn-signin { width: 80%; margin-top: 20px; padding: 12px; font-size: 16px; text-align: center; border-radius: 50px; border: 1.5px solid white; color: white; background: transparent; }
       
-      .hero-container { flex-direction: column; padding-top: 80px; text-align: center; }
-      .hero-visual { order: -1; min-height: 35vh; width: 100%; }
-      .hero-left { padding: 30px 20px; align-items: center; }
+      .hero-container { 
+        flex-direction: column; 
+        padding-top: 80px; 
+        text-align: center;
+        min-height: auto;
+      }
+      .hero-visual { 
+        order: -1; 
+        min-height: 40vh; 
+        width: 100%; 
+        border-radius: 0 0 30px 30px;
+      }
+      .hero-left { 
+        padding: 40px 20px; 
+        align-items: center; 
+        min-height: auto;
+      }
       .hero-left h1 { font-size: clamp(28px, 10vw, 36px); margin-bottom: 15px; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
       .hero-left p { font-size: 14px; margin-bottom: 25px; max-width: 100%; font-weight: 700; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
       .hero-buttons { flex-direction: column; gap: 12px; width: 100%; max-width: 280px; }
@@ -1325,6 +1465,88 @@
       .size-price-btn-hero { font-size: 11px; padding: 6px; }
     }
 
+    /* Promo View Styles */
+    .promo-container-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+      align-items: center;
+      padding-bottom: 60px;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: 600px; /* Prevent container collapse and twitching */
+    }
+
+    .promo-card-new {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 32px;
+      width: 100%;
+      max-width: 1000px;
+      padding: 0;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      color: white;
+      text-align: left;
+      will-change: transform;
+    }
+
+    .promo-card-new:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .promo-image-new {
+      width: 100%;
+      max-height: 500px;
+      object-fit: contain;
+      background: rgba(0,0,0,0.1);
+      border-radius: 0;
+      display: block;
+    }
+
+    .promo-info-new {
+      padding: 40px;
+      background: transparent; /* Removed extra background to prevent twitching/artifacts */
+    }
+
+    .promo-title-new {
+      font-family: 'Roboto Slab', serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: white;
+      margin: 0 0 20px 0;
+    }
+
+    .promo-details-new {
+      font-size: 1.25rem;
+      color: rgba(255,255,255,0.9);
+      line-height: 1.8;
+      margin-bottom: 30px;
+    }
+
+    .promo-footer-new {
+      padding: 24px 40px;
+      background: rgba(175, 143, 111, 0.2);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .promo-title-new { font-size: 1.8rem; }
+      .promo-details-new { font-size: 1rem; }
+      .promo-info-new { padding: 25px; }
+      .promo-footer-new { padding: 15px 25px; font-size: 14px; }
+    }
+
     /* Auth Modal Mobile Refinement */
     @media (max-width: 500px) {
       .auth-modal-content {
@@ -1341,29 +1563,64 @@
 <body>
 
   <nav class="navbar">
-    <div class="nav-left-content">
-      <div class="nav-logo" onclick="navigateTo('home')" style="cursor: pointer;">
-        <img src="images/tori.jpg" alt="Tori Logo">
+    <div class="nav-container">
+      <div class="nav-left-content">
+        <div class="nav-logo" onclick="navigateTo('home')" style="cursor: pointer;">
+          <img src="images/tori.jpg" alt="Tori Logo">
+        </div>
+      </div>
+      
+      <div class="nav-links" id="navLinks">
+        <button class="mobile-menu-close" onclick="toggleMobileMenu()">
+          <i class="fas fa-times"></i>
+        </button>
+        <a href="javascript:void(0)" onclick="navigateTo('home')" id="nav-home" class="active">Home</a>
+        <a href="javascript:void(0)" onclick="navigateTo('menu')" id="nav-menu">Menu</a>
+        <a href="javascript:void(0)" onclick="navigateTo('promos')" id="nav-promos">Promos</a>
+        <a href="javascript:void(0)" onclick="navigateTo('wheel')" id="nav-wheel">Wheel</a>
+        <a href="javascript:void(0)" onclick="navigateTo('about')" id="nav-about">About</a>
+      </div>
+
+      <div class="nav-right-mobile-group">
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
       </div>
     </div>
-    
-    <div class="nav-links" id="navLinks">
-      <button class="mobile-menu-close" onclick="toggleMobileMenu()">
-        <i class="fas fa-times"></i>
-      </button>
-      <a href="javascript:void(0)" onclick="navigateTo('home')" id="nav-home" class="active">Home</a>
-      <a href="javascript:void(0)" onclick="navigateTo('menu')" id="nav-menu">Menu</a>
-      <a href="javascript:void(0)" onclick="navigateTo('wheel')" id="nav-wheel">Wheel</a>
-      <a href="javascript:void(0)" onclick="navigateTo('about')" id="nav-about">About</a>
-    </div>
-
-    <div class="nav-right-mobile-group">
-      <!-- Mobile Menu Button -->
-      <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-        <i class="fas fa-bars"></i>
-      </button>
-    </div>
   </nav>
+
+  <!-- Item Details Modal -->
+  <div id="itemModal" class="item-modal" onclick="if(event.target === this) closeItemModal()">
+    <div class="item-modal-content">
+      <div class="item-modal-close" onclick="closeItemModal()">&times;</div>
+      <div id="modalImg" class="item-modal-img"></div>
+      <div class="item-modal-info">
+        <h2 id="modalTitle" class="item-modal-title">Item Name</h2>
+        <p id="modalDesc" class="item-modal-desc">Item description goes here.</p>
+        
+        <div id="modalTempSection">
+          <div class="modal-section-title">Temperature</div>
+          <div class="modal-temp-options">
+            <button id="tempCold" class="modal-temp-btn" onclick="setModalTemp('Cold')">
+              <i class="fas fa-snowflake"></i> Cold
+            </button>
+            <button id="tempHot" class="modal-temp-btn active" onclick="setModalTemp('Hot')">
+              <i class="fas fa-mug-hot"></i> Hot
+            </button>
+          </div>
+        </div>
+        
+        <div class="modal-section-title">Select Size</div>
+        <div id="modalSizeGrid" class="modal-size-grid"></div>
+        
+        <button class="modal-order-btn" onclick="handleModalOrder()">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Order Now</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- HOME VIEW -->
   <div id="view-home" class="page-view active">
@@ -1399,6 +1656,16 @@
       </div>
       <div class="menu-grid" id="menuGrid">
         <p style="grid-column: 1/-1; padding: 50px; font-size: 20px;">Loading menu items...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROMOS VIEW -->
+  <div id="view-promos" class="page-view">
+    <div class="menu-view">
+      <h2 class="wheel-title">Exclusive Promos</h2>
+      <div id="promoGrid" class="promo-container-layout">
+        <p style="padding: 50px; font-size: 20px; color: white;">Loading promos...</p>
       </div>
     </div>
   </div>
@@ -1524,6 +1791,7 @@
 
   <script>
     let allProducts = [];
+    let allPromos = [];
     let categories = { 1: "Coffee", 2: "Non-coffee", 3: "Frappe", 4: "Soda", 5: "Pastries" };
     let currentCat = 'All';
     let searchVal = '';
@@ -1534,6 +1802,7 @@
       document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
       document.getElementById('nav-' + view).classList.add('active');
       if (view === 'menu') renderMenu();
+      if (view === 'promos') renderPromos();
       if (view === 'wheel') {
         initWheel();
         // Show tap hint when navigating to wheel
@@ -1575,11 +1844,26 @@
     async function loadData() {
       if (!window.getDB) return;
       const db = getDB();
+      if (!db) {
+        setTimeout(loadData, 500);
+        return;
+      }
+      
+      // Load products
       const { data, error } = await db.from('products').select('*').eq('archived', false);
       if (!error) {
         allProducts = data;
         if (document.getElementById('view-menu').classList.contains('active')) renderMenu();
       }
+
+      // Load promos initial cache
+      const { data: promoData, error: promoError } = await db.from('promos').select('*').order('created_at', { ascending: false });
+      if (!promoError) {
+        allPromos = promoData;
+        if (document.getElementById('view-promos').classList.contains('active')) renderPromos();
+      }
+      
+      subscribeToPromos();
     }
 
     function handleSearch() {
@@ -1648,47 +1932,153 @@
         card.className = 'menu-card';
         const imgUrl = sizes[0].image_url || 'images/tori.jpg';
         
-        // Find price range
-        const prices = sizes.map(s => Number(s.product_price));
-        const minPrice = Math.min(...prices);
-        const maxPrice = Math.max(...prices);
-        
-        // Force Hot/Cold ONLY for Coffee items
-        const catName = categories[sizes[0].category_id];
-        const isCoffee = catName === 'Coffee';
-        const showTemp = isCoffee;
-        
         card.innerHTML = `
-          <div class="menu-card-img-wrapper" onclick="zoomImage('${imgUrl}', '${name.replace(/'/g, "\\'")}')">
+          <div class="menu-card-img-wrapper" onclick="openItemModal('${name.replace(/'/g, "\\'")}', ${JSON.stringify(sizes).replace(/"/g, '&quot;')})">
             <img src="${imgUrl}" alt="${name}" onerror="this.src='images/tori.jpg'">
-          </div>
-          <div class="menu-card-info">
-            <h3 style="margin:0; font-family: 'Roboto Slab', serif;">${name}</h3>
-            
-            ${showTemp ? `
-              <div class="temp-options-hero">
-                <div class="temp-option" title="Cold" onclick="event.stopPropagation(); toggleTemp(this)">&#10052;</div>
-                <div class="temp-option active" title="Hot" onclick="event.stopPropagation(); toggleTemp(this)">&#9749;</div>
-              </div>
-            ` : ''}
-            
-            <div class="size-price-grid-hero">
-              ${sizes.map((s, idx) => `
-                <div class="size-price-btn-hero ${idx === 0 ? 'active' : ''}" onclick="event.stopPropagation(); selectSize(this, '${s.product_price}')">
-                  <span class="size-label">${s.size}</span>
-                  <span class="price-label">₱${s.product_price}</span>
-                </div>
-              `).join('')}
-            </div>
-            
-            <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid #eee;">
-              <span class="current-price-display" style="font-weight: 800; color: var(--accent-brown); font-size: 14px;">₱${sizes[0].product_price}</span>
-              <button onclick="event.stopPropagation(); openAuthModal();" style="background: var(--coffee-dark); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;">Order</button>
+            <div class="menu-card-overlay">
+              <span class="view-details">View Details</span>
             </div>
           </div>
         `;
         grid.appendChild(card);
       });
+    }
+
+    let currentModalItem = null;
+    let selectedModalSize = null;
+    let selectedModalTemp = 'Hot';
+
+    function openItemModal(name, sizes) {
+      currentModalItem = { name, sizes };
+      selectedModalSize = sizes[0];
+      selectedModalTemp = 'Hot';
+      
+      document.getElementById('modalTitle').textContent = name;
+      document.getElementById('modalDesc').textContent = sizes[0].description || "Enjoy our premium " + name + ", crafted with passion and the finest ingredients.";
+      document.getElementById('modalImg').style.backgroundImage = `url('${sizes[0].image_url || 'images/tori.jpg'}')`;
+      
+      // Temperature section - only for Coffee
+      const isCoffee = categories[sizes[0].category_id] === 'Coffee';
+      document.getElementById('modalTempSection').style.display = isCoffee ? 'block' : 'none';
+      
+      // Sizes grid
+      const sizeGrid = document.getElementById('modalSizeGrid');
+      sizeGrid.innerHTML = '';
+      sizes.forEach((s, idx) => {
+        const btn = document.createElement('div');
+        btn.className = 'modal-size-btn' + (idx === 0 ? ' active' : '');
+        btn.innerHTML = `
+          <span class="size-name">${s.size}</span>
+          <span class="size-price">₱${s.product_price}</span>
+        `;
+        btn.onclick = () => {
+          document.querySelectorAll('.modal-size-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          selectedModalSize = s;
+        };
+        sizeGrid.appendChild(btn);
+      });
+      
+      document.getElementById('itemModal').style.display = 'flex';
+      document.body.style.overflow = 'hidden'; // Prevent scroll
+    }
+
+    function closeItemModal() {
+      document.getElementById('itemModal').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    function setModalTemp(temp) {
+      selectedModalTemp = temp;
+      document.querySelectorAll('.modal-temp-btn').forEach(b => b.classList.remove('active'));
+      if (temp === 'Cold') document.getElementById('tempCold').classList.add('active');
+      else document.getElementById('tempHot').classList.add('active');
+    }
+
+    function handleModalOrder() {
+      closeItemModal();
+      openAuthModal();
+    }
+
+    let promosUnsub = null;
+    let promosReloadTimer = null;
+
+    function subscribeToPromos() {
+      const db = getDB();
+      if (!db) {
+        setTimeout(subscribeToPromos, 500);
+        return;
+      }
+
+      if (promosUnsub) promosUnsub.unsubscribe();
+
+      promosUnsub = db.channel('hero-promos-realtime')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'promos' }, () => {
+          if (promosReloadTimer) clearTimeout(promosReloadTimer);
+          promosReloadTimer = setTimeout(() => {
+            if (document.getElementById('view-promos').classList.contains('active')) {
+              renderPromos();
+            }
+          }, 300);
+        })
+        .subscribe();
+    }
+
+    async function renderPromos() {
+      const grid = document.getElementById('promoGrid');
+      
+      const db = getDB();
+      if (!db) {
+        setTimeout(renderPromos, 500);
+        return;
+      }
+      
+      const { data, error } = await db.from('promos').select('*').order('created_at', { ascending: false });
+      
+      if (error) {
+        grid.innerHTML = `<p style="padding: 50px; font-size: 20px; color: white;">Error loading promos: ${error.message}</p>`;
+        return;
+      }
+      
+      if (!data || data.length === 0) {
+        grid.innerHTML = '<p style="padding: 50px; font-size: 20px; color: white;">No active promos at the moment. Stay tuned!</p>';
+        return;
+      }
+
+      // Show ALL promos (removed date filtering as requested)
+      const activePromos = data;
+
+      if (activePromos.length === 0) {
+        grid.innerHTML = '<p style="padding: 50px; font-size: 20px; color: white;">No active promos at the moment. Stay tuned!</p>';
+        return;
+      }
+      
+      // Prepare fragment
+      const fragment = document.createDocumentFragment();
+      activePromos.forEach(promo => {
+        const card = document.createElement('div');
+        card.className = 'promo-card-new';
+        
+        const dateStr = (promo.expires_at || promo.valid_until) ? new Date(promo.expires_at || promo.valid_until).toLocaleDateString() : 'Limited Time';
+        const codeDisplay = promo.code && promo.code.trim() !== "" ? `Code: ${promo.code}` : "Exclusive Offer";
+        const description = promo.description || promo.content || '';
+        
+        card.innerHTML = `
+          ${promo.image_url ? `<img src="${promo.image_url}" class="promo-image-new" alt="${promo.title}" loading="lazy" onerror="this.style.display='none'">` : ''}
+          <div class="promo-info-new">
+            <h3 class="promo-title-new">${promo.title}</h3>
+            <div class="promo-details-new">${description.replace(/\n/g, "<br>")}</div>
+          </div>
+          <div class="promo-footer-new">
+            <span>${codeDisplay}</span>
+            <span>Valid until: ${dateStr}</span>
+          </div>
+        `;
+        fragment.appendChild(card);
+      });
+
+      // Update DOM in one go using replaceChildren for stability
+      grid.replaceChildren(fragment);
     }
 
     function toggleTemp(el) {
@@ -1739,6 +2129,10 @@
     }
 
     let wheelCtx, rotation = 0, isSpinning = false, wheelItems = [];
+    let offscreenWheel = document.createElement('canvas');
+    let offscreenCtx = offscreenWheel.getContext('2d');
+    offscreenWheel.width = 1000;
+    offscreenWheel.height = 1000;
 
     function initWheel() {
       const canvas = document.getElementById('wheelCanvas');
@@ -1760,38 +2154,85 @@
     function updateWheel() {
       const checked = Array.from(document.querySelectorAll('#wheelCatsList input:checked')).map(i => i.value);
       wheelItems = allProducts.filter(p => checked.includes(categories[p.category_id]));
+      preRenderWheel();
       drawWheel();
+    }
+
+    function preRenderWheel() {
+      if (!offscreenCtx) return;
+      const s = 1000, c = 500, r = 475;
+      offscreenCtx.clearRect(0, 0, s, s);
+      
+      if (wheelItems.length === 0) {
+        offscreenCtx.fillStyle = "#444";
+        offscreenCtx.beginPath();
+        offscreenCtx.arc(c, c, r, 0, Math.PI * 2);
+        offscreenCtx.fill();
+        offscreenCtx.fillStyle = "white";
+        offscreenCtx.font = "bold 40px Inter";
+        offscreenCtx.textAlign = "center";
+        offscreenCtx.fillText("SELECT CATEGORIES", c, c);
+        return;
+      }
+
+      const slice = (Math.PI * 2) / wheelItems.length;
+      wheelItems.forEach((it, i) => {
+        const a = i * slice;
+        offscreenCtx.fillStyle = i % 2 ? "#74512D" : "#AF8F6F";
+        offscreenCtx.beginPath();
+        offscreenCtx.moveTo(c, c);
+        offscreenCtx.arc(c, c, r, a, a + slice);
+        offscreenCtx.fill();
+        
+        offscreenCtx.save();
+        offscreenCtx.translate(c, c);
+        offscreenCtx.rotate(a + slice / 2);
+        offscreenCtx.fillStyle = "white";
+        offscreenCtx.font = "bold 26px Inter";
+        offscreenCtx.textAlign = "right";
+        let n = it.name.length > 28 ? it.name.substr(0, 25) + '...' : it.name;
+        offscreenCtx.fillText(n, r - 50, 8);
+        offscreenCtx.restore();
+      });
     }
 
     function drawWheel() {
       if (!wheelCtx) return;
       const s = 1000, c = 500, r = 475;
+      
+      // 1. Clear main canvas
       wheelCtx.clearRect(0, 0, s, s);
-      wheelCtx.beginPath(); wheelCtx.arc(c, c, r + 25, 0, Math.PI * 2); wheelCtx.fillStyle = "#111"; wheelCtx.fill();
+      
+      // 2. Draw static background (rim and outer shadow)
+      wheelCtx.beginPath();
+      wheelCtx.arc(c, c, r + 25, 0, Math.PI * 2);
+      wheelCtx.fillStyle = "#111";
+      wheelCtx.fill();
+      
+      // 3. Draw the rotated pre-rendered wheel
+      wheelCtx.save();
+      wheelCtx.translate(c, c);
+      wheelCtx.rotate(rotation);
+      wheelCtx.translate(-c, -c);
+      wheelCtx.drawImage(offscreenWheel, 0, 0);
+      wheelCtx.restore();
+      
+      // 4. Draw static foreground (dots on rim and center pin)
       for(let i=0; i<16; i++) {
         const a = (i * Math.PI * 2) / 16;
-        wheelCtx.beginPath(); wheelCtx.arc(c + (r+25)*Math.cos(a), c + (r+25)*Math.sin(a), 12, 0, Math.PI * 2);
-        wheelCtx.fillStyle = "#FFD700"; wheelCtx.fill();
+        wheelCtx.beginPath();
+        wheelCtx.arc(c + (r+25)*Math.cos(a), c + (r+25)*Math.sin(a), 12, 0, Math.PI * 2);
+        wheelCtx.fillStyle = "#FFD700";
+        wheelCtx.fill();
       }
-      if (wheelItems.length === 0) {
-        wheelCtx.fillStyle = "#444"; wheelCtx.beginPath(); wheelCtx.moveTo(c, c); wheelCtx.arc(c, c, r, 0, Math.PI * 2); wheelCtx.fill();
-        wheelCtx.fillStyle = "white"; wheelCtx.font = "bold 40px Inter"; wheelCtx.textAlign = "center";
-        wheelCtx.fillText("SELECT CATEGORIES", c, c);
-      } else {
-        const slice = (Math.PI * 2) / wheelItems.length;
-        wheelItems.forEach((it, i) => {
-          const a = i * slice + rotation;
-          wheelCtx.fillStyle = i % 2 ? "#74512D" : "#AF8F6F";
-          wheelCtx.beginPath(); wheelCtx.moveTo(c, c); wheelCtx.arc(c, c, r, a, a + slice); wheelCtx.fill();
-          wheelCtx.save(); wheelCtx.translate(c, c); wheelCtx.rotate(a + slice/2);
-          wheelCtx.fillStyle = "white"; wheelCtx.font = "bold 26px Inter"; wheelCtx.textAlign = "right";
-          let n = it.name.length > 28 ? it.name.substr(0, 25) + '...' : it.name;
-          wheelCtx.fillText(n, r - 50, 8);
-          wheelCtx.restore();
-        });
-      }
-      wheelCtx.beginPath(); wheelCtx.arc(c, c, 70, 0, Math.PI * 2); wheelCtx.fillStyle = "#FFD700"; wheelCtx.fill();
-      wheelCtx.strokeStyle = "#111"; wheelCtx.lineWidth = 6; wheelCtx.stroke();
+      
+      wheelCtx.beginPath();
+      wheelCtx.arc(c, c, 70, 0, Math.PI * 2);
+      wheelCtx.fillStyle = "#FFD700";
+      wheelCtx.fill();
+      wheelCtx.strokeStyle = "#111";
+      wheelCtx.lineWidth = 6;
+      wheelCtx.stroke();
     }
 
     function spinTheWheel() {

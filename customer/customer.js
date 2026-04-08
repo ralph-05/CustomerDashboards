@@ -5,6 +5,7 @@ let isBookingSubmitting = false
 let isOrderSubmitting = false
 let db = null
 const categories = { 1: "Coffee", 2: "Non-coffee", 3: "Frappe", 4: "Soda", 5: "Pastries" }
+let allPromos = []
 let customerNoticeCount = 0
 const CUSTOMER_NOTICE_KEY = "customer_notice_last_seen"
 let lastNoticeSeen = Number(localStorage.getItem(CUSTOMER_NOTICE_KEY) || 0)
@@ -50,7 +51,10 @@ function normalizeProductRecord(p) {
 }
 
 function subscribeToPromosRealtime() {
-  if (!db) return
+  if (!isDbReady()) {
+    setTimeout(subscribeToPromosRealtime, 500)
+    return
+  }
 
   if (promosUnsub && typeof promosUnsub.unsubscribe === "function") {
     promosUnsub.unsubscribe()
@@ -61,7 +65,13 @@ function subscribeToPromosRealtime() {
     .on(
       "postgres_changes",
       { event: "*", schema: "public", table: "promos" },
-      () => {
+      async (payload) => {
+        console.log("[System Log] Real-time promo update received:", payload.eventType)
+        
+        // Update cache
+        const { data: promoData } = await db.from("promos").select("*").order("created_at", { ascending: false });
+        allPromos = promoData;
+
         if (promosReloadTimer) clearTimeout(promosReloadTimer)
         promosReloadTimer = setTimeout(() => loadPromos(), 250)
       }
@@ -84,17 +94,13 @@ window.toggleCategoryDropdown = () => {
 }
 
 window.selectCategory = (cat, element) => {
-  // Update UI
-  document.querySelectorAll(".category-item").forEach(item => item.classList.remove("active"))
-  element.classList.add("active")
-  document.getElementById("currentCategoryLabel").textContent = cat === 'All' ? 'All Items' : cat
-  
-  // Close dropdown
-  document.getElementById("categoryMenu").classList.remove("show")
+  // Update UI for buttons
+  document.querySelectorAll(".cat-pill").forEach(item => item.classList.remove("active"))
+  if (element) element.classList.add("active")
   
   // Call existing filter function
-  if (typeof filterCategory === 'function') {
-    filterCategory(cat, element)
+  if (typeof window.filterCategory === 'function') {
+    window.filterCategory(cat, element)
   }
 }
 
@@ -2750,7 +2756,7 @@ window.registerFromModal = registerFromModal
 window.loginFromModal = loginFromModal
 
 window.filterCategory = (category, el) => {
-  document.querySelectorAll(".category-filter button").forEach((b) => b.classList.remove("active"))
+  document.querySelectorAll(".cat-pill").forEach((b) => b.classList.remove("active"))
   if (el) el.classList.add("active")
   currentMenuCategory = category
   if (typeof closeOrderDrawer === "function") closeOrderDrawer()
@@ -3159,70 +3165,56 @@ function viewLoyaltyHistory() {
 }
 
 // --- PROMOS ---
-function loadPromos() {
+async function loadPromos() {
   const promoList = document.getElementById("promoList")
   if (!promoList) return
-  promoList.innerHTML = '<p style="text-align:center; color:#666;">Loading promos...</p>'
 
   if (!isDbReady()) {
-    promoList.innerHTML = '<p style="text-align:center; color:red;">Database not ready.</p>'
+    setTimeout(loadPromos, 500)
     return
   }
 
-  db.from("promos")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .then(({ data: promos, error }) => {
-      if (error) throw error;
-      
-      // Filter out expired promos (hide on the due date)
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      const activePromos = (promos || []).filter((p) => {
-        if (!p.valid_until) return true // No expiry = always active
-        const expiryDate = new Date(p.valid_until)
-        if (Number.isNaN(expiryDate.getTime())) return true
-        expiryDate.setHours(0, 0, 0, 0)
-        return expiryDate > today // Hide if expiry date is today or earlier
-      })
+  // If cache is empty, fetch it once
+  if (!allPromos || allPromos.length === 0) {
+    const { data, error } = await db.from("promos").select("*").order("created_at", { ascending: false });
+    if (!error && data) {
+      allPromos = data;
+    }
+  }
 
-      if (activePromos.length === 0) {
-        promoList.innerHTML = '<p style="text-align:center; color:#666;">No active promos/announcements at the moment.</p>'
-        return
-      }
-      promoList.innerHTML = ""
-      activePromos.forEach((d) => {
-        const card = document.createElement("div")
-        card.className = "promo-card-new"
-        
-        let imgHtml = ""
-        if (d.image_url) {
-          imgHtml = `<img src="${d.image_url}" alt="${d.title || "Promo Image"}" class="promo-image-new">`
-        }
+  // Show ALL promos (removed date filtering as requested)
+  const activePromos = allPromos || []
 
-        const postedDate = d.created_at ? new Date(d.created_at).toLocaleDateString() : ""
-        const expiryDate = d.valid_until ? new Date(d.valid_until).toLocaleDateString() : ""
+  if (activePromos.length === 0) {
+    promoList.innerHTML = '<p style="text-align:center; color:#fff; padding: 50px;">No active promos/announcements at the moment.</p>'
+    return
+  }
+  
+  const fragment = document.createDocumentFragment()
+  activePromos.forEach((d) => {
+    const card = document.createElement("div")
+    card.className = "promo-card-new"
+    
+    const dateStr = (d.expires_at || d.valid_until) ? new Date(d.expires_at || d.valid_until).toLocaleDateString() : 'Limited Time';
+    const description = d.description || d.content || '';
+    const codeDisplay = d.code && d.code.trim() !== "" ? `Code: ${d.code}` : "Exclusive Offer";
 
-        card.innerHTML = `
-          <div class="promo-content-wrapper">
-            ${imgHtml}
-            <div class="promo-info-new">
-              <h3 class="promo-title-new">${d.title || "Untitled Promo"}</h3>
-              <div class="promo-details-new">${(d.content || "").replace(/\n/g, "<br>")}</div>
-              <div class="promo-footer-new">
-                <span class="promo-posted">Posted: ${postedDate}</span>
-                ${expiryDate ? `<span class="promo-expiry">Valid until: ${expiryDate}</span>` : ""}
-              </div>
-            </div>
-          </div>
-        `
-        promoList.appendChild(card)
-      })
-    })
-    .catch((err) => {
-      console.error("Error loading promos:", err)
-      promoList.innerHTML = `<p style="text-align:center; color:red;">Error loading promos: ${err.message}</p>`
-    })
+    card.innerHTML = `
+      ${d.image_url ? `<img src="${d.image_url}" class="promo-image-new" alt="${d.title || 'Promo'}" loading="lazy" onerror="this.style.display='none'">` : ''}
+      <div class="promo-info-new">
+        <h3 class="promo-title-new">${d.title || "Untitled Promo"}</h3>
+        <div class="promo-details-new">${description.replace(/\n/g, "<br>")}</div>
+      </div>
+      <div class="promo-footer-new">
+        <span>${codeDisplay}</span>
+        <span>Valid until: ${dateStr}</span>
+      </div>
+    `
+    fragment.appendChild(card)
+  })
+
+  // Update DOM in one go using replaceChildren for stability
+  promoList.replaceChildren(fragment)
 }
 
 // --- LOAD MENU ---
@@ -3393,13 +3385,6 @@ function renderMenu(category) {
   if (!menuList) return
   menuList.replaceChildren()
 
-  // Batch DOM updates to avoid jank on slower devices
-  const renderToken = Date.now()
-  window.__menuRenderToken = renderToken
-  window.__menuImgIndex = 0
-
-  const frag = document.createDocumentFragment()
-
   const categoryOrder = ["Coffee", "Non-coffee", "Frappe", "Soda", "Pastries", "Uncategorized"]
   const cats = categoryOrder
     .filter((c) => groupedProducts[c])
@@ -3410,6 +3395,8 @@ function renderMenu(category) {
     return
   }
 
+  const frag = document.createDocumentFragment()
+
   cats.forEach((catName) => {
     if (category !== "All" && category !== catName) return
 
@@ -3418,164 +3405,110 @@ function renderMenu(category) {
         if (!currentMenuSearch) return true
         return prodName.toLowerCase().includes(currentMenuSearch)
     })
-    .sort((a, b) => {
-      const nameA = String(a[0] || "")
-        .trim()
-        .toLowerCase()
-      const nameB = String(b[0] || "")
-        .trim()
-        .toLowerCase()
-      if (nameA < nameB) return -1
-      if (nameA > nameB) return 1
-      return 0
-    })
+    .sort((a, b) => a[0].localeCompare(b[0]))
 
     if (entries.length > 0 && category === "All") {
       const header = document.createElement("div")
       header.className = "category-header"
-      
-      // Add icons based on category name
-      let icon = ""
-      if (catName.includes("Coffee")) icon = "&#9749;"
-      else if (catName.includes("Non-coffee")) icon = "&#129380;"
-      else if (catName.includes("Frappe")) icon = "&#127848;"
-      else if (catName.includes("Soda")) icon = "&#129380;"
-      else if (catName.includes("Pastries")) icon = "&#129360;"
-      
+      let icon = catName.includes("Coffee") ? "&#9749;" : catName.includes("Non-coffee") ? "&#129380;" : catName.includes("Frappe") ? "&#127848;" : catName.includes("Soda") ? "&#129380;" : catName.includes("Pastries") ? "&#129360;" : "";
       header.innerHTML = `<span>${icon}</span> ${catName}`
       frag.appendChild(header)
     }
 
     entries.forEach(([prodName, sizesArr]) => {
       const sizes = [...sizesArr].sort((p1, p2) => Number(p1.id || 0) - Number(p2.id || 0))
-      const itemDiv = document.createElement("div")
-      itemDiv.className = "menu-item-card"
+      const card = document.createElement("div")
+      card.className = "menu-card"
 
-      // Find first available photo from any size variant - try photo_url first, then fallback for legacy data
-      let basePhoto = null
-      for (const sizeItem of sizes) {
-        // Try photo_url first, then fallback to other field names for legacy data
-        basePhoto = sizeItem.image_url || sizeItem.image_url || sizeItem.photo || sizeItem.image_url || sizeItem.image || sizeItem.photoUrl || null
-        if (basePhoto) {
-          break
-        }
-      }
-
-      const hasImage = basePhoto && String(basePhoto).trim() !== ""
-      if (hasImage) {
-        const img = document.createElement("img")
-        img.src = basePhoto
-        img.alt = prodName
-        img.crossOrigin = "anonymous"
-        img.decoding = "async"
-        // Eager-load the first few images for perceived speed
-        const idx = window.__menuImgIndex || 0
-        img.loading = idx < 10 ? "eager" : "lazy"
-        if (idx < 5) img.fetchPriority = "high"
-        window.__menuImgIndex = idx + 1
-        img.className = "menu-item-img"
-        img.onerror = (e) => {
-          console.warn("[v0] Image failed to load:", basePhoto)
-          img.src = "../images/tori.jpg"
-        }
-        itemDiv.appendChild(img)
-      }
-
-      const contentDiv = document.createElement("div")
-      contentDiv.className = "menu-item-info"
-
-      const nameDiv = document.createElement("h3")
-      nameDiv.textContent = prodName
-      contentDiv.appendChild(nameDiv)
-
-      // Add temperature buttons for Coffee category
-      if (catName === "Coffee") {
-        const tempContainer = document.createElement("div")
-        tempContainer.className = "temp-buttons-container"
-        
-        // Helper to update active state
-        const updateActiveState = (selectedTemp) => {
-             const btns = tempContainer.querySelectorAll(".temp-icon-btn")
-             btns.forEach(btn => btn.classList.remove("active"))
-             if (selectedTemp === "Cold") coldBtn.classList.add("active")
-             if (selectedTemp === "Hot") hotBtn.classList.add("active")
-             itemDiv.dataset.selectedTemp = selectedTemp
-        }
-
-        const coldBtn = document.createElement("button")
-        coldBtn.className = "temp-icon-btn"
-        coldBtn.innerHTML = "&#10052;"
-        coldBtn.title = "Cold"
-        coldBtn.onclick = (e) => {
-          e.stopPropagation()
-          updateActiveState("Cold")
-        }
-        
-        const hotBtn = document.createElement("button")
-        hotBtn.className = "temp-icon-btn active"
-        hotBtn.innerHTML = "&#9749;"
-        hotBtn.title = "Hot"
-        hotBtn.onclick = (e) => {
-          e.stopPropagation()
-          updateActiveState("Hot")
-        }
-        
-        // Default to Hot
-        itemDiv.dataset.selectedTemp = "Hot"
-        
-        tempContainer.appendChild(coldBtn)
-        tempContainer.appendChild(hotBtn)
-        contentDiv.appendChild(tempContainer)
-      }
-
-      const sizesContainer = document.createElement("div")
-      sizesContainer.className = "menu-item-sizes"
+      const basePhoto = sizes[0].image_url || "../images/tori.jpg"
       
-      sizes.forEach((p) => {
-        const btn = document.createElement("button")
-        btn.className = "size-price-btn"
-        const price = Number(p.price || p.product_price || 0)
-        
-        if (p.is_available === false) {
-            btn.innerHTML = `<div>${p.size || 'Size'}</div><div>Sold Out</div>`
-            btn.disabled = true
-            btn.style.opacity = "0.6"
-            btn.style.cursor = "not-allowed"
-        } else {
-            btn.innerHTML = `<div>${p.size || 'Size'}</div><div>\u20B1${price.toFixed(2)}</div>`
-            btn.onclick = (e) => {
-              e.stopPropagation()
-              const photo = p.image_url || p.image_url || basePhoto || ""
-              const temperature = catName === "Coffee" ? (itemDiv.dataset.selectedTemp || "Hot") : null
-              if (typeof addToOrder === 'function') {
-                addToOrder(p.id, prodName, price, photo, temperature)
-              }
-            }
-        }
-        sizesContainer.appendChild(btn)
-      })
-      contentDiv.appendChild(sizesContainer)
-
-      itemDiv.appendChild(contentDiv)
-      frag.appendChild(itemDiv)
+      card.innerHTML = `
+        <img src="${basePhoto}" alt="${prodName}" onerror="this.src='../images/tori.jpg'">
+        <div class="menu-card-overlay">
+          <div class="menu-card-name">${prodName}</div>
+          <div class="view-details-btn">View Details</div>
+        </div>
+      `
+      
+      card.onclick = () => openItemModal(prodName, sizes, catName)
+      frag.appendChild(card)
     })
   })
 
-  // Append in chunks to keep scrolling/input responsive
-  const nodes = Array.from(frag.childNodes)
-  menuList.replaceChildren()
-  let i = 0
-  const chunkSize = 18
-  const appendChunk = () => {
-    if (window.__menuRenderToken !== renderToken) return
-    const f = document.createDocumentFragment()
-    for (let c = 0; c < chunkSize && i < nodes.length; c++, i++) {
-      f.appendChild(nodes[i])
+  menuList.appendChild(frag)
+}
+
+let currentModalItem = null
+let selectedModalSize = null
+let selectedModalTemp = 'Hot'
+
+function openItemModal(name, sizes, catName) {
+  currentModalItem = { name, sizes, catName }
+  selectedModalSize = sizes[0]
+  selectedModalTemp = 'Hot'
+  
+  document.getElementById('modalTitle').textContent = name
+  document.getElementById('modalDesc').textContent = sizes[0].description || "Enjoy our premium " + name + ", crafted with passion and the finest ingredients."
+  document.getElementById('modalImg').style.backgroundImage = `url('${sizes[0].image_url || '../images/tori.jpg'}')`
+  
+  // Temperature section - only for Coffee
+  const isCoffee = catName === 'Coffee'
+  document.getElementById('modalTempSection').style.display = isCoffee ? 'block' : 'none'
+  
+  // Sizes grid
+  const sizeGrid = document.getElementById('modalSizeGrid')
+  sizeGrid.innerHTML = ''
+  sizes.forEach((s, idx) => {
+    const btn = document.createElement('div')
+    btn.className = 'modal-size-btn' + (idx === 0 ? ' active' : '')
+    if (s.is_available === false) {
+      btn.classList.add('disabled')
+      btn.innerHTML = `
+        <span class="size-name">${s.size}</span>
+        <span class="size-price">Sold Out</span>
+      `
+    } else {
+      btn.innerHTML = `
+        <span class="size-name">${s.size}</span>
+        <span class="size-price">₱${Number(s.price || s.product_price || 0).toFixed(2)}</span>
+      `
+      btn.onclick = () => {
+        document.querySelectorAll('.modal-size-btn').forEach(b => b.classList.remove('active'))
+        btn.classList.add('active')
+        selectedModalSize = s
+      }
     }
-    menuList.appendChild(f)
-    if (i < nodes.length) requestAnimationFrame(appendChunk)
+    sizeGrid.appendChild(btn)
+  })
+  
+  document.getElementById('itemModal').style.display = 'flex'
+  document.body.style.overflow = 'hidden'
+}
+
+function closeItemModal() {
+  const modal = document.getElementById('itemModal')
+  if (modal) modal.style.display = 'none'
+  document.body.style.overflow = 'auto'
+}
+
+function setModalTemp(temp) {
+  selectedModalTemp = temp
+  document.querySelectorAll('.modal-temp-btn').forEach(b => b.classList.remove('active'))
+  if (temp === 'Cold') document.getElementById('tempCold').classList.add('active')
+  else document.getElementById('tempHot').classList.add('active')
+}
+
+function handleModalAdd() {
+  if (!selectedModalSize || selectedModalSize.is_available === false) return
+  
+  const price = Number(selectedModalSize.price || selectedModalSize.product_price || 0)
+  const photo = selectedModalSize.image_url || currentModalItem.sizes[0].image_url || ""
+  const temperature = currentModalItem.catName === "Coffee" ? selectedModalTemp : null
+  
+  if (typeof addToOrder === 'function') {
+    addToOrder(selectedModalSize.id, currentModalItem.name, price, photo, temperature)
+    closeItemModal()
   }
-  requestAnimationFrame(appendChunk)
 }
 
 // --- KIOSK ORDER LOGIC ---
@@ -5246,128 +5179,6 @@ window.toggleMobileNav = () => {
   if (sidebar) sidebar.classList.toggle('mobile-active');
   if (overlay) overlay.classList.toggle('active');
 }
-
-window.selectCategory = (cat, element) => {
-  if (typeof renderMenu === 'function') {
-    renderMenu(cat);
-  }
-}
-
-// Load and display promos
-window.loadPromos = async () => {
-  const promoList = document.getElementById('promoList');
-  if (!promoList) return;
-
-  try {
-    promoList.innerHTML = '<div class="promo-loading">Loading promos...</div>';
-
-    let promos = [];
-
-    // Try to load from Supabase if available
-    if (typeof db !== 'undefined' && db && db.from) {
-      try {
-        const { data, error } = await db
-          .from('promos')
-          .select('*')
-          .eq('is_active', true)
-          .order('created_at', { ascending: false });
-
-        if (!error && data) {
-          promos = data;
-        }
-      } catch (e) {
-        // Supabase not available
-      }
-    }
-
-    // Try to load from localStorage as fallback
-    if (!promos || promos.length === 0) {
-      try {
-        const storedPromos = localStorage.getItem('customer_promos');
-        if (storedPromos) {
-          promos = JSON.parse(storedPromos);
-        }
-      } catch (e) {
-        // No stored promos found
-      }
-    }
-
-    // Render promos or show empty state
-    if (!promos || promos.length === 0) {
-      promoList.innerHTML = '<div class="promo-empty-state">No active promos available right now. Check back soon!</div>';
-      return;
-    }
-
-    promoList.innerHTML = '';
-    promos.forEach(promo => {
-      const promoCard = createPromoCard(promo);
-      promoList.appendChild(promoCard);
-    });
-  } catch (error) {
-    console.error('Error loading promos:', error);
-    promoList.innerHTML = '<div class="promo-empty-state">Error loading promos. Please refresh the page.</div>';
-  }
-}
-
-// Subscribe to real-time promo updates from Supabase
-window.subscribeToPromosRealtime = () => {
-  if (typeof db === 'undefined' || !db || !db.from) return;
-
-  try {
-    db.from('promos')
-      .on('*', payload => {
-        // Reload promos when changes are detected
-        if (document.getElementById('promoList')) {
-          loadPromos();
-        }
-      })
-      .subscribe();
-  } catch (error) {
-    // Real-time subscription not available
-  }
-}
-
-// Create a promo card DOM element
-function createPromoCard(promo) {
-  const card = document.createElement('div');
-  card.className = 'promo-card';
-
-  // Format date
-  const promoDate = new Date(promo.created_at || promo.date);
-  const dateStr = promoDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-
-  // Get image URL or use placeholder
-  const imageUrl = promo.image_url || promo.photo || promo.image || '';
-
-  card.innerHTML = `
-    ${imageUrl ? `<img src="${imageUrl}" alt="${promo.title || 'Promo'}" class="promo-card-image" onerror="this.style.display='none'">` : ''}
-    <div class="promo-card-content">
-      <h3 class="promo-card-title">${promo.title || 'Special Offer'}</h3>
-      <p class="promo-card-description">${promo.description || promo.details || 'Limited time offer'}</p>
-      <div class="promo-card-details">
-        <span class="promo-card-date">${dateStr}</span>
-        ${promo.discount ? `<span style="color: var(--danger); font-weight: 600;">${promo.discount}</span>` : ''}
-      </div>
-    </div>
-  `;
-
-  return card;
-}
-
-// Initialize promos when page loads or navigates to promo section
-function initializePromos() {
-  if (typeof subscribeToPromosRealtime === 'function') {
-    subscribeToPromosRealtime();
-  }
-  loadPromos();
-}
-
-// Hook into page navigation
-window.addEventListener('show-page', (e) => {
-  if (e.detail && e.detail.page === 'promos') {
-    initializePromos();
-  }
-});
 
 window.customerLogout = () => {
   localStorage.removeItem("customer_auth")
